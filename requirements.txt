@@ -1,0 +1,3 @@
+gradio
+deep-translator
+gTTS

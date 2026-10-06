@@ -12,10 +12,12 @@ The project is structured to run smoothly in both local environments (`app.py`) 
 
 ---
 
-##  iOS Design System Highlights
+##  iOS WindowGlass Design Highlights
 
-* **San Francisco Typography & Apple System Fonts:** Crystal-clear visual hierarchy using `-apple-system`, `SF Pro Display`, and `Plus Jakarta Sans`.
-* **Vibrant Glassmorphism & Continuous Radii:** Soft squircle corner geometry (`border-radius: 20px`), subtle drop shadows, and clean grouped surfaces.
+* **WindowGlass / Frosted Glassmorphism:** Translucent glass cards with hardware-accelerated `backdrop-filter: blur(28px) saturate(190%)`, specular border reflections, and multi-tier ambient shadows.
+* **Translation Icon Wallpaper Background:** Customized dynamic wallpaper with frosted glass ambient overlay.
+* **Horizontally Extended Canvas (1100px):** Expansive, spacious layout with side-by-side text and audio controls and wide history tables.
+* **San Francisco Typography & Apple System Fonts:** Crystal-clear visual hierarchy using `-apple-system`, `SF Pro Display`, and Apple system fonts.
 * **Apple Segmented Pickers & Pill Controls:** Pill-shaped action buttons (Translate, Swap ⇄, Clear ✕, Listen 🔊) with tactile spring interactions.
 * **iOS Inset Grouped History:** History logs styled after native iOS Settings and Notes recents with smooth disclosures.
 

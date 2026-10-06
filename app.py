@@ -32,7 +32,7 @@ from translation import (
 # -------------------------------------------------------------------------
 def get_ios_theme() -> gr.themes.Soft:
     """
-    Constructs a native Apple iOS theme with high-contrast text and surfaces.
+    Constructs a native Apple iOS WindowGlass theme with high-contrast text and frosted surfaces.
     """
     theme = gr.themes.Soft(
         primary_hue="blue",
@@ -49,82 +49,132 @@ def get_ios_theme() -> gr.themes.Soft:
             "sans-serif"
         ]
     ).set(
-        # Canvas Background
-        body_background_fill="#F2F2F7",
-        body_background_fill_dark="#000000",
+        # Canvas Background (semi-translucent for window glass backdrop)
+        body_background_fill="rgba(240, 244, 252, 0.5)",
+        body_background_fill_dark="rgba(14, 18, 28, 0.7)",
         
-        # Inset Grouped Card Fill
-        block_background_fill="#FFFFFF",
-        block_background_fill_dark="#1C1C1E",
+        # WindowGlass Card Fill
+        block_background_fill="rgba(255, 255, 255, 0.72)",
+        block_background_fill_dark="rgba(22, 26, 40, 0.76)",
         block_border_width="1px",
-        block_border_color="rgba(60, 60, 67, 0.15)",
-        block_border_color_dark="rgba(255, 255, 255, 0.15)",
-        block_radius="18px",
-        block_shadow="0 4px 20px rgba(0, 0, 0, 0.04)",
+        block_border_color="rgba(255, 255, 255, 0.75)",
+        block_border_color_dark="rgba(255, 255, 255, 0.16)",
+        block_radius="22px",
+        block_shadow="0 16px 40px -8px rgba(0, 32, 64, 0.09)",
         
         # Primary Action Button (Apple System Blue)
         button_primary_background_fill="#007AFF",
         button_primary_background_fill_hover="#0062CC",
         button_primary_text_color="#FFFFFF",
         
-        # Secondary Action Buttons (Apple System Gray Fill)
-        button_secondary_background_fill="#E5E5EA",
-        button_secondary_background_fill_dark="#2C2C2E",
+        # Secondary Action Buttons (Frosted Glass Fill)
+        button_secondary_background_fill="rgba(255, 255, 255, 0.75)",
+        button_secondary_background_fill_dark="rgba(36, 42, 60, 0.75)",
         button_secondary_text_color="#007AFF",
-        button_secondary_text_color_dark="#0A84FF",
+        button_secondary_text_color_dark="#5AC8FA",
         
-        # Form Inputs (High-Contrast White / Dark Fill)
-        input_background_fill="#FFFFFF",
-        input_background_fill_dark="#2C2C2E",
-        input_border_color="rgba(60, 60, 67, 0.20)",
-        input_border_color_dark="rgba(255, 255, 255, 0.20)",
+        # Form Inputs (Frosted Glass Fill)
+        input_background_fill="rgba(255, 255, 255, 0.82)",
+        input_background_fill_dark="rgba(30, 35, 50, 0.82)",
+        input_border_color="rgba(0, 122, 255, 0.20)",
+        input_border_color_dark="rgba(255, 255, 255, 0.18)",
         input_radius="14px"
     )
     return theme
 
 
 # -------------------------------------------------------------------------
-# Apple iOS Custom CSS (Enhancements & Transitions)
+# WindowGlass Background & Extended Layout CSS
 # -------------------------------------------------------------------------
 APPLE_IOS_CSS = """
-/* Container Layout */
-.gradio-container {
-    max-width: 820px !important;
-    margin: 20px auto 40px auto !important;
-    padding: 0 16px !important;
+/* Background Image & WindowGlass Ambience */
+body {
+    background-image: 
+        linear-gradient(135deg, rgba(240, 244, 252, 0.82), rgba(248, 250, 255, 0.88)),
+        url('https://cdn.vectorstock.com/i/1000v/07/99/icon-representing-translation-from-english-vector-53290799.jpg'),
+        url('/file=assets/bg_translation.jpg') !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    background-attachment: fixed !important;
+    min-height: 100vh !important;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", sans-serif !important;
 }
 
-/* Apple Header Banner */
+:is(.dark) body {
+    background-image: 
+        linear-gradient(135deg, rgba(16, 20, 32, 0.88), rgba(24, 30, 46, 0.92)),
+        url('https://cdn.vectorstock.com/i/1000v/07/99/icon-representing-translation-from-english-vector-53290799.jpg'),
+        url('/file=assets/bg_translation.jpg') !important;
+    background-position: center center !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    background-attachment: fixed !important;
+}
+
+/* Extended Horizontal Layout Container */
+.gradio-container {
+    max-width: 1100px !important;
+    width: 95% !important;
+    margin: 24px auto 48px auto !important;
+    padding: 0 20px !important;
+    background: transparent !important;
+}
+
+/* WindowGlass Card Effect (Translucent + Heavy Backdrop Blur) */
+.glass-card,
+.apple-header,
+.ios-result-section,
+.gr-group,
+div[data-testid="block"] {
+    background: rgba(255, 255, 255, 0.72) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
+    backdrop-filter: blur(28px) saturate(190%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.75) !important;
+    border-radius: 24px !important;
+    box-shadow: 0 16px 40px -8px rgba(0, 32, 64, 0.09), 0 0 0 1px rgba(255, 255, 255, 0.6) inset !important;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+:is(.dark) .glass-card,
+:is(.dark) .apple-header,
+:is(.dark) .ios-result-section,
+:is(.dark) .gr-group,
+:is(.dark) div[data-testid="block"] {
+    background: rgba(22, 26, 40, 0.76) !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08) inset !important;
+}
+
+/* Glass Header Banner */
 .apple-header {
     text-align: center;
-    padding: 22px 16px;
-    background: #FFFFFF;
-    border-radius: 20px;
-    border: 1px solid rgba(60, 60, 67, 0.12);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-    margin-bottom: 20px;
-}
-
-:is(.dark) .apple-header {
-    background: #1C1C1E !important;
-    border-color: rgba(255, 255, 255, 0.12) !important;
+    padding: 24px 20px;
+    margin-bottom: 22px;
 }
 
 .apple-pill-tag {
     display: inline-block;
-    background: rgba(0, 122, 255, 0.10);
+    background: rgba(0, 122, 255, 0.12);
     color: #007AFF;
-    padding: 4px 14px;
+    padding: 4px 16px;
     border-radius: 9999px;
     font-size: 0.78rem;
     font-weight: 700;
-    letter-spacing: 0.4px;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
     margin-bottom: 8px;
+    border: 1px solid rgba(0, 122, 255, 0.2);
+}
+
+:is(.dark) .apple-pill-tag {
+    background: rgba(10, 132, 255, 0.2);
+    color: #5AC8FA;
+    border-color: rgba(90, 200, 250, 0.3);
 }
 
 .apple-title {
-    font-size: 2.2rem !important;
+    font-size: 2.3rem !important;
     font-weight: 800 !important;
     letter-spacing: -0.6px !important;
     margin: 2px 0 6px 0 !important;
@@ -132,109 +182,153 @@ APPLE_IOS_CSS = """
 }
 
 .apple-subtitle {
-    font-size: 0.96rem !important;
-    color: #8E8E93 !important;
+    font-size: 0.98rem !important;
+    color: #6E6E73 !important;
     margin: 0 !important;
 }
 
-/* Apple Primary Button (Full-Width Pill) */
+:is(.dark) .apple-subtitle {
+    color: #98989D !important;
+}
+
+/* Frosted Glass Inputs & Textareas */
+input, textarea, .gr-input, .gr-box {
+    background: rgba(255, 255, 255, 0.82) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    backdrop-filter: blur(14px) !important;
+    border: 1px solid rgba(0, 122, 255, 0.18) !important;
+    border-radius: 14px !important;
+    color: #1C1C1E !important;
+    font-size: 1rem !important;
+}
+
+:is(.dark) input, :is(.dark) textarea, :is(.dark) .gr-input, :is(.dark) .gr-box {
+    background: rgba(30, 35, 50, 0.82) !important;
+    border-color: rgba(255, 255, 255, 0.18) !important;
+    color: #F2F2F7 !important;
+}
+
+/* Apple Primary Button (Vibrant Pill with Glass Shine) */
 .apple-translate-btn button {
-    background: #007AFF !important;
-    background-image: linear-gradient(180deg, #0A84FF 0%, #007AFF 100%) !important;
+    background: linear-gradient(180deg, #0A84FF 0%, #007AFF 100%) !important;
     color: #FFFFFF !important;
     border-radius: 9999px !important;
-    font-size: 1.1rem !important;
+    font-size: 1.15rem !important;
     font-weight: 700 !important;
     letter-spacing: -0.2px !important;
-    padding: 14px 30px !important;
-    border: none !important;
-    box-shadow: 0 6px 20px rgba(0, 122, 255, 0.35) !important;
-    transition: all 0.15s ease !important;
+    padding: 15px 32px !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    box-shadow: 0 8px 26px rgba(0, 122, 255, 0.38), 0 1px 2px rgba(255, 255, 255, 0.4) inset !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
     cursor: pointer !important;
     width: 100% !important;
 }
 
 .apple-translate-btn button:hover {
-    background-image: linear-gradient(180deg, #007AFF 0%, #0062CC 100%) !important;
-    transform: translateY(-1px) !important;
-    box-shadow: 0 8px 24px rgba(0, 122, 255, 0.42) !important;
+    background: linear-gradient(180deg, #007AFF 0%, #0062CC 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 12px 30px rgba(0, 122, 255, 0.48), 0 1px 2px rgba(255, 255, 255, 0.5) inset !important;
 }
 
 .apple-translate-btn button:active {
-    transform: scale(0.97) !important;
-    box-shadow: 0 2px 8px rgba(0, 122, 255, 0.2) !important;
+    transform: scale(0.98) !important;
+    box-shadow: 0 4px 12px rgba(0, 122, 255, 0.25) !important;
 }
 
-/* Result Card with Smooth Spring Transition */
+/* Result Card with Spring Animation */
 @keyframes iosReveal {
     0% {
         opacity: 0;
-        transform: translateY(18px);
+        transform: translateY(20px) scale(0.99);
     }
     100% {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
     }
 }
 
 .ios-result-section {
-    animation: iosReveal 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
-    margin-top: 14px !important;
-    margin-bottom: 20px !important;
-    padding: 18px 20px !important;
-    background: #FFFFFF !important;
-    border-radius: 20px !important;
-    border: 1.5px solid rgba(0, 122, 255, 0.25) !important;
-    box-shadow: 0 6px 28px rgba(0, 122, 255, 0.08) !important;
+    animation: iosReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+    margin-top: 16px !important;
+    margin-bottom: 22px !important;
+    padding: 22px 24px !important;
+    border: 1.5px solid rgba(0, 122, 255, 0.35) !important;
 }
 
 :is(.dark) .ios-result-section {
-    background: #1C1C1E !important;
-    border-color: rgba(10, 132, 255, 0.35) !important;
+    border-color: rgba(10, 132, 255, 0.45) !important;
 }
 
 .ios-result-tag {
     display: inline-block;
-    background: rgba(0, 122, 255, 0.10);
+    background: rgba(0, 122, 255, 0.12);
     color: #007AFF;
-    padding: 4px 12px;
+    padding: 4px 14px;
     border-radius: 9999px;
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     font-weight: 700;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 }
 
-/* Apple Secondary Pill Buttons */
+/* Frosted Glass Secondary Pill Buttons */
 button[variant="secondary"] {
+    background: rgba(255, 255, 255, 0.75) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.8) !important;
+    color: #007AFF !important;
     border-radius: 9999px !important;
     font-weight: 600 !important;
-    transition: all 0.15s ease !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+    transition: all 0.2s ease !important;
+}
+
+button[variant="secondary"]:hover {
+    background: rgba(255, 255, 255, 0.95) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08) !important;
 }
 
 button[variant="secondary"]:active {
     transform: scale(0.97) !important;
 }
 
-/* Destructive Button */
+:is(.dark) button[variant="secondary"] {
+    background: rgba(36, 42, 60, 0.75) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    color: #5AC8FA !important;
+}
+
+/* Stop / Destructive Button */
 button[variant="stop"] {
     border-radius: 9999px !important;
     font-weight: 600 !important;
 }
 
-/* Input Stats Pill */
+/* Character & Word Stats Pill */
 .stats-chip {
-    font-size: 0.82rem;
+    font-size: 0.84rem;
     font-weight: 600;
-    color: #8E8E93;
-    margin-top: 4px;
+    color: #6E6E73;
+    margin-top: 6px;
+}
+
+/* Inset Grouped History Table */
+.gr-dataframe {
+    border-radius: 16px !important;
+    overflow: hidden !important;
 }
 
 /* Footer */
 .apple-footer {
     text-align: center;
-    padding: 20px 0 8px 0;
-    color: #8E8E93;
-    font-size: 0.82rem;
+    padding: 24px 0 12px 0;
+    color: #6E6E73;
+    font-size: 0.84rem;
+}
+
+:is(.dark) .apple-footer {
+    color: #98989D;
 }
 """
 
@@ -413,19 +507,22 @@ def create_app() -> gr.Blocks:
                 "✦ Translation Result",
                 elem_classes=["ios-result-tag"]
             )
-            output_text = gr.Textbox(
-                label="Translated Text",
-                placeholder="Translation appears here...",
-                lines=4,
-                max_lines=8,
-                interactive=False,
-                **copy_kwarg
-            )
-            audio_output = gr.Audio(
-                label="🔊 Speech Pronunciation",
-                type="filepath",
-                interactive=False
-            )
+            with gr.Row():
+                with gr.Column(scale=3):
+                    output_text = gr.Textbox(
+                        label="Translated Text",
+                        placeholder="Translation appears here...",
+                        lines=4,
+                        max_lines=8,
+                        interactive=False,
+                        **copy_kwarg
+                    )
+                with gr.Column(scale=2):
+                    audio_output = gr.Audio(
+                        label="🔊 Speech Pronunciation",
+                        type="filepath",
+                        interactive=False
+                    )
             # Result Action Controls
             with gr.Row():
                 swap_btn = gr.Button("⇄ Swap Languages", variant="secondary")
@@ -515,4 +612,4 @@ if __name__ == "__main__":
     app = create_app()
     print("Launching Apple iOS-Style AI Language Translation Tool...")
     theme = get_ios_theme()
-    app.launch(theme=theme, css=APPLE_IOS_CSS, share=False)
+    app.launch(theme=theme, css=APPLE_IOS_CSS, share=False, allowed_paths=["assets"])

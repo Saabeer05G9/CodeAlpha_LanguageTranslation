@@ -74,11 +74,14 @@ def get_ios_theme() -> gr.themes.Soft:
         button_secondary_text_color_dark="#5AC8FA",
         
         # Form Inputs (Frosted Glass Fill)
-        input_background_fill="rgba(255, 255, 255, 0.82)",
-        input_background_fill_dark="rgba(30, 35, 50, 0.82)",
-        input_border_color="rgba(0, 122, 255, 0.20)",
-        input_border_color_dark="rgba(255, 255, 255, 0.18)",
-        input_radius="14px"
+        input_background_fill="rgba(255, 255, 255, 0.88)",
+        input_background_fill_dark="rgba(30, 36, 54, 0.88)",
+        input_border_color="rgba(0, 122, 255, 0.25)",
+        input_border_color_dark="rgba(255, 255, 255, 0.20)",
+        input_radius="18px",
+        input_padding="14px 18px",
+        input_text_size="lg",
+        input_text_weight="600"
     )
     return theme
 
@@ -156,74 +159,305 @@ body {
     overflow: visible !important;
 }
 
-/* Dropdown component styling */
-.gr-dropdown,
-[data-testid="dropdown"] {
-    position: relative !important;
-    z-index: 50 !important;
+/* =========================================================================
+   Apple iOS Language Selector Boxes (Prominent, High-Touch, Luxurious)
+   ========================================================================= */
+.language-picker-row {
+    display: flex !important;
+    gap: 18px !important;
+    margin-bottom: 18px !important;
+    width: 100% !important;
     overflow: visible !important;
 }
 
-/* Dropdown floating options menu popover */
-ul.options,
+/* Dropdown Container */
+.ios-dropdown-picker,
+div[data-testid="dropdown"],
+.gr-dropdown {
+    position: relative !important;
+    z-index: 60 !important;
+    overflow: visible !important;
+    flex: 1 1 320px !important;
+}
+
+/* Dropdown Labels & Helper Info */
+.ios-dropdown-picker label > span:first-child,
+div[data-testid="dropdown"] label > span:first-child,
+.ios-dropdown-picker .block-label {
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    color: #1C1C1E !important;
+    letter-spacing: -0.2px !important;
+    margin-bottom: 4px !important;
+    display: block !important;
+}
+
+:is(.dark) .ios-dropdown-picker label > span:first-child,
+:is(.dark) div[data-testid="dropdown"] label > span:first-child,
+:is(.dark) .ios-dropdown-picker .block-label {
+    color: #FFFFFF !important;
+}
+
+.ios-dropdown-picker .block-info,
+.ios-dropdown-picker label .info,
+div[data-testid="dropdown"] .info {
+    font-size: 0.85rem !important;
+    color: #6E6E73 !important;
+    margin-bottom: 8px !important;
+}
+
+:is(.dark) .ios-dropdown-picker .block-info,
+:is(.dark) .ios-dropdown-picker label .info,
+:is(.dark) div[data-testid="dropdown"] .info {
+    color: #98989D !important;
+}
+
+/* The Selector Box Outer Wrap (Taller, Prominent, Pill-Rounded, WindowGlass) */
+.ios-dropdown-picker .wrap,
+div[data-testid="dropdown"] .wrap,
+.ios-dropdown-picker .container .wrap {
+    min-height: 58px !important;
+    height: 58px !important;
+    border-radius: 18px !important;
+    background: rgba(255, 255, 255, 0.90) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    border: 1.5px solid rgba(0, 122, 255, 0.28) !important;
+    box-shadow: 0 4px 16px rgba(0, 32, 64, 0.07), 0 1px 2px rgba(255, 255, 255, 0.85) inset !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 16px !important;
+    position: relative !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    overflow: visible !important;
+}
+
+:is(.dark) .ios-dropdown-picker .wrap,
+:is(.dark) div[data-testid="dropdown"] .wrap,
+:is(.dark) .ios-dropdown-picker .container .wrap {
+    background: rgba(30, 36, 54, 0.90) !important;
+    border-color: rgba(255, 255, 255, 0.22) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(255, 255, 255, 0.08) inset !important;
+}
+
+.ios-dropdown-picker .wrap:hover,
+div[data-testid="dropdown"] .wrap:hover {
+    border-color: #007AFF !important;
+    box-shadow: 0 6px 20px rgba(0, 122, 255, 0.18), 0 1px 2px rgba(255, 255, 255, 0.9) inset !important;
+    transform: translateY(-1px) !important;
+}
+
+.ios-dropdown-picker .wrap:focus-within,
+div[data-testid="dropdown"] .wrap:focus-within {
+    border-color: #007AFF !important;
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.25), 0 8px 24px rgba(0, 122, 255, 0.15) !important;
+}
+
+:is(.dark) .ios-dropdown-picker .wrap:focus-within,
+:is(.dark) div[data-testid="dropdown"] .wrap:focus-within {
+    border-color: #5AC8FA !important;
+    box-shadow: 0 0 0 3px rgba(90, 200, 250, 0.3), 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Secondary Wrap and Inner Structure */
+.ios-dropdown-picker .wrap-inner,
+div[data-testid="dropdown"] .wrap-inner,
+.ios-dropdown-picker .secondary-wrap,
+div[data-testid="dropdown"] .secondary-wrap {
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    position: relative !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Dropdown Input Text (Crisp, Large Typography, Clear Selection) */
+.ios-dropdown-picker input,
+div[data-testid="dropdown"] input,
+.ios-dropdown-picker input[role="combobox"],
+div[data-testid="dropdown"] input[role="combobox"] {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    font-size: 1.15rem !important;
+    font-weight: 600 !important;
+    color: #1C1C1E !important;
+    letter-spacing: -0.2px !important;
+    cursor: pointer !important;
+    width: 100% !important;
+    height: 100% !important;
+    padding: 0 36px 0 4px !important;
+    outline: none !important;
+}
+
+:is(.dark) .ios-dropdown-picker input,
+:is(.dark) div[data-testid="dropdown"] input,
+:is(.dark) .ios-dropdown-picker input[role="combobox"],
+:is(.dark) div[data-testid="dropdown"] input[role="combobox"] {
+    color: #FFFFFF !important;
+}
+
+/* Selecting Arrow / Chevron (Prominent, Apple Blue, Elegant) */
+.ios-dropdown-picker .icon-wrap,
+div[data-testid="dropdown"] .icon-wrap {
+    position: absolute !important;
+    right: 14px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 28px !important;
+    height: 28px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    pointer-events: none !important;
+    color: #007AFF !important;
+}
+
+:is(.dark) .ios-dropdown-picker .icon-wrap,
+:is(.dark) div[data-testid="dropdown"] .icon-wrap {
+    color: #5AC8FA !important;
+}
+
+.ios-dropdown-picker svg.dropdown-arrow,
+div[data-testid="dropdown"] svg.dropdown-arrow,
+.ios-dropdown-picker .icon-wrap svg,
+div[data-testid="dropdown"] .icon-wrap svg,
+.ios-dropdown-picker svg,
+div[data-testid="dropdown"] svg {
+    width: 22px !important;
+    height: 22px !important;
+    min-width: 22px !important;
+    min-height: 22px !important;
+    fill: currentColor !important;
+    color: #007AFF !important;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+:is(.dark) .ios-dropdown-picker svg.dropdown-arrow,
+:is(.dark) div[data-testid="dropdown"] svg.dropdown-arrow,
+:is(.dark) .ios-dropdown-picker .icon-wrap svg,
+:is(.dark) div[data-testid="dropdown"] .icon-wrap svg,
+:is(.dark) .ios-dropdown-picker svg,
+:is(.dark) div[data-testid="dropdown"] svg {
+    color: #5AC8FA !important;
+}
+
+/* Arrow rotation on focus */
+.ios-dropdown-picker .wrap:focus-within svg.dropdown-arrow,
+div[data-testid="dropdown"] .wrap:focus-within svg.dropdown-arrow,
+.ios-dropdown-picker .wrap:focus-within .icon-wrap svg,
+div[data-testid="dropdown"] .wrap:focus-within .icon-wrap svg {
+    transform: rotate(180deg) !important;
+}
+
+/* =========================================================================
+   Dropdown Popover Menu (Spacious, Scrollable, Expansive 130+ Languages)
+   ========================================================================= */
 .options,
+div.options,
+ul.options,
+.options.svelte-1ou0lab,
 .dropdown-menu,
 div[role="listbox"],
-ul[role="listbox"],
-.secondary-wrap {
+ul[role="listbox"] {
     z-index: 999999 !important;
-    position: absolute !important;
-    max-height: 320px !important;
-    overflow-y: auto !important;
-    background: #FFFFFF !important;
-    border: 1.5px solid rgba(0, 122, 255, 0.25) !important;
-    border-radius: 14px !important;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2) !important;
+    max-height: 480px !important;
+    min-height: 260px !important;
+    min-width: 320px !important;
+    background: rgba(255, 255, 255, 0.98) !important;
+    -webkit-backdrop-filter: blur(32px) saturate(200%) !important;
+    backdrop-filter: blur(32px) saturate(200%) !important;
+    border: 1.5px solid rgba(0, 122, 255, 0.32) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 24px 60px rgba(0, 32, 64, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.9) inset !important;
+    padding: 8px !important;
+    overflow: hidden !important;
     opacity: 1 !important;
     visibility: visible !important;
 }
 
-:is(.dark) ul.options,
 :is(.dark) .options,
+:is(.dark) div.options,
+:is(.dark) ul.options,
+:is(.dark) .options.svelte-1ou0lab,
 :is(.dark) .dropdown-menu,
 :is(.dark) div[role="listbox"],
-:is(.dark) ul[role="listbox"],
-:is(.dark) .secondary-wrap {
-    background: #202436 !important;
-    border-color: rgba(255, 255, 255, 0.25) !important;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6) !important;
+:is(.dark) ul[role="listbox"] {
+    background: rgba(24, 30, 46, 0.98) !important;
+    border-color: rgba(90, 200, 250, 0.35) !important;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.12) inset !important;
 }
 
-/* Dropdown list items */
+/* Option List Container */
+.option-list,
+ul.option-list,
+.option-list.svelte-1ou0lab {
+    max-height: 460px !important;
+    min-height: 240px !important;
+    overflow-y: auto !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: rgba(0, 122, 255, 0.4) transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
+}
+
+/* Individual Language Item */
 li.item,
 .item,
-[role="option"] {
-    padding: 10px 14px !important;
+[role="option"],
+li[data-testid="dropdown-option"],
+.item.svelte-1ou0lab {
+    padding: 12px 18px !important;
+    min-height: 46px !important;
+    font-size: 1.05rem !important;
+    font-weight: 500 !important;
     color: #1C1C1E !important;
-    font-size: 0.98rem !important;
     cursor: pointer !important;
-    background: transparent !important;
-}
-
-li.item:hover,
-.item:hover,
-[role="option"]:hover,
-.item.selected,
-[role="option"][aria-selected="true"] {
-    background: rgba(0, 122, 255, 0.12) !important;
-    color: #007AFF !important;
-    font-weight: 700 !important;
+    border-radius: 12px !important;
+    margin-bottom: 2px !important;
+    display: flex !important;
+    align-items: center !important;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease !important;
 }
 
 :is(.dark) li.item,
 :is(.dark) .item,
-:is(.dark) [role="option"] {
+:is(.dark) [role="option"],
+:is(.dark) li[data-testid="dropdown-option"],
+:is(.dark) .item.svelte-1ou0lab {
     color: #F2F2F7 !important;
+}
+
+/* Hover and Selected States */
+li.item:hover,
+.item:hover,
+[role="option"]:hover,
+li[data-testid="dropdown-option"]:hover,
+.item.svelte-1ou0lab:hover,
+.item.selected,
+.active.svelte-1ou0lab,
+[role="option"][aria-selected="true"] {
+    background: rgba(0, 122, 255, 0.14) !important;
+    color: #007AFF !important;
+    font-weight: 700 !important;
+    padding-left: 22px !important;
 }
 
 :is(.dark) li.item:hover,
 :is(.dark) .item:hover,
 :is(.dark) [role="option"]:hover,
+:is(.dark) li[data-testid="dropdown-option"]:hover,
+:is(.dark) .item.svelte-1ou0lab:hover,
+:is(.dark) .item.selected,
+:is(.dark) .active.svelte-1ou0lab,
 :is(.dark) [role="option"][aria-selected="true"] {
     background: rgba(10, 132, 255, 0.3) !important;
     color: #5AC8FA !important;
@@ -556,15 +790,23 @@ def create_app() -> gr.Blocks:
                     choices=source_choices,
                     value="English",
                     label="Selected Language (From)",
-                    info="Choose input language or Auto Detect",
-                    interactive=True
+                    info="Choose input language or Auto Detect (130+ languages)",
+                    interactive=True,
+                    scale=1,
+                    min_width=320,
+                    num_choices_shown=None,
+                    elem_classes=["ios-dropdown-picker"]
                 )
                 target_dropdown = gr.Dropdown(
                     choices=target_choices,
                     value="Telugu",
                     label="Translation Language (To)",
-                    info="Choose destination language",
-                    interactive=True
+                    info="Choose destination language (130+ languages)",
+                    interactive=True,
+                    scale=1,
+                    min_width=320,
+                    num_choices_shown=None,
+                    elem_classes=["ios-dropdown-picker"]
                 )
 
             input_text = gr.Textbox(

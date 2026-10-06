@@ -125,25 +125,108 @@ body {
 .glass-card,
 .apple-header,
 .ios-result-section,
-.gr-group,
-div[data-testid="block"] {
-    background: rgba(255, 255, 255, 0.72) !important;
+.main-input-card {
+    background: rgba(255, 255, 255, 0.74) !important;
     -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
     backdrop-filter: blur(28px) saturate(190%) !important;
     border: 1px solid rgba(255, 255, 255, 0.75) !important;
     border-radius: 24px !important;
     box-shadow: 0 16px 40px -8px rgba(0, 32, 64, 0.09), 0 0 0 1px rgba(255, 255, 255, 0.6) inset !important;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    padding: 22px 24px !important;
+    margin-bottom: 20px !important;
+    overflow: visible !important;
 }
 
 :is(.dark) .glass-card,
 :is(.dark) .apple-header,
 :is(.dark) .ios-result-section,
-:is(.dark) .gr-group,
-:is(.dark) div[data-testid="block"] {
-    background: rgba(22, 26, 40, 0.76) !important;
+:is(.dark) .main-input-card {
+    background: rgba(22, 26, 40, 0.78) !important;
     border: 1px solid rgba(255, 255, 255, 0.16) !important;
     box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08) inset !important;
+}
+
+/* Ensure Dropdown Floating Menus Are Never Clipped and Always on Top */
+.main-input-card,
+.language-picker-row,
+.gr-row,
+.gr-form,
+.form,
+.gr-group {
+    overflow: visible !important;
+}
+
+/* Dropdown component styling */
+.gr-dropdown,
+[data-testid="dropdown"] {
+    position: relative !important;
+    z-index: 50 !important;
+    overflow: visible !important;
+}
+
+/* Dropdown floating options menu popover */
+ul.options,
+.options,
+.dropdown-menu,
+div[role="listbox"],
+ul[role="listbox"],
+.secondary-wrap {
+    z-index: 999999 !important;
+    position: absolute !important;
+    max-height: 320px !important;
+    overflow-y: auto !important;
+    background: #FFFFFF !important;
+    border: 1.5px solid rgba(0, 122, 255, 0.25) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+:is(.dark) ul.options,
+:is(.dark) .options,
+:is(.dark) .dropdown-menu,
+:is(.dark) div[role="listbox"],
+:is(.dark) ul[role="listbox"],
+:is(.dark) .secondary-wrap {
+    background: #202436 !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* Dropdown list items */
+li.item,
+.item,
+[role="option"] {
+    padding: 10px 14px !important;
+    color: #1C1C1E !important;
+    font-size: 0.98rem !important;
+    cursor: pointer !important;
+    background: transparent !important;
+}
+
+li.item:hover,
+.item:hover,
+[role="option"]:hover,
+.item.selected,
+[role="option"][aria-selected="true"] {
+    background: rgba(0, 122, 255, 0.12) !important;
+    color: #007AFF !important;
+    font-weight: 700 !important;
+}
+
+:is(.dark) li.item,
+:is(.dark) .item,
+:is(.dark) [role="option"] {
+    color: #F2F2F7 !important;
+}
+
+:is(.dark) li.item:hover,
+:is(.dark) .item:hover,
+:is(.dark) [role="option"]:hover,
+:is(.dark) [role="option"][aria-selected="true"] {
+    background: rgba(10, 132, 255, 0.3) !important;
+    color: #5AC8FA !important;
 }
 
 /* Glass Header Banner */
@@ -467,19 +550,21 @@ def create_app() -> gr.Blocks:
         """)
 
         # 2. Main Input Card: Language Selectors & Text Input Box
-        with gr.Group():
-            with gr.Row():
+        with gr.Column(elem_classes=["glass-card", "main-input-card"]):
+            with gr.Row(elem_classes=["language-picker-row"]):
                 source_dropdown = gr.Dropdown(
                     choices=source_choices,
                     value="English",
                     label="Selected Language (From)",
-                    info="Choose input language or Auto Detect"
+                    info="Choose input language or Auto Detect",
+                    interactive=True
                 )
                 target_dropdown = gr.Dropdown(
                     choices=target_choices,
                     value="Telugu",
                     label="Translation Language (To)",
-                    info="Choose destination language"
+                    info="Choose destination language",
+                    interactive=True
                 )
 
             input_text = gr.Textbox(

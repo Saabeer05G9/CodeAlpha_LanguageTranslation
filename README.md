@@ -1,46 +1,42 @@
-# AI Language Translation Tool 🌐
+# Translate AI — iOS-Style Language Translation Tool 🌐
 
-An interactive, AI-powered multi-language translation web application developed with **Python**, **Gradio**, **deep-translator**, and **Google Text-to-Speech (gTTS)**.
-
----
-
-## 📌 CodeAlpha Internship Context
-
-This project was developed as **Task 1: Language Translation Tool** for the **CodeAlpha Artificial Intelligence Internship**.
-
-- **Organization:** CodeAlpha
-- **Track:** Artificial Intelligence Internship
-- **Task:** Task 1 — Language Translation Tool
-- **Developer:** Saabeer
-- **Repository:** `Saabeer05G9/CodeAlpha_LanguageTranslation`
+An intuitive, AI-powered multi-language translation web application featuring an **Apple iOS Human Interface Guidelines (HIG)** aesthetic, built with **Python**, **Gradio**, **deep-translator**, and **Google Text-to-Speech (gTTS)**.
 
 ---
 
 ## 📖 Project Overview
 
-The **AI Language Translation Tool** enables users to translate text across multiple languages with speed, accuracy, and ease. In addition to high-fidelity translation, the application provides pronunciation playback using Text-to-Speech, live text metrics (character & word count), one-click language swapping, and an ongoing translation history log.
+**Translate AI** is designed to provide seamless, reliable translation across 15+ major languages with the polish and responsiveness of a native iOS application. In addition to high-fidelity text translation, the application includes natural speech pronunciation (TTS), dynamic word and character counters, instant language swapping, and an ongoing translation history log.
 
-The project is structured to run smoothly in both local environments (`app.py`) and cloud environments like **Google Colab** (`notebooks/translation_tool.ipynb`).
+The project is structured to run smoothly in both local environments (`app.py`) and cloud runtimes like **Google Colab** (`notebooks/translation_tool.ipynb`).
+
+---
+
+##  iOS Design System Highlights
+
+* **San Francisco Typography & Apple System Fonts:** Crystal-clear visual hierarchy using `-apple-system`, `SF Pro Display`, and `Plus Jakarta Sans`.
+* **Vibrant Glassmorphism & Continuous Radii:** Soft squircle corner geometry (`border-radius: 20px`), subtle drop shadows, and clean grouped surfaces.
+* **Apple Segmented Pickers & Pill Controls:** Pill-shaped action buttons (Translate, Swap ⇄, Clear ✕, Listen 🔊) with tactile spring interactions.
+* **iOS Inset Grouped History:** History logs styled after native iOS Settings and Notes recents with smooth disclosures.
 
 ---
 
 ## ✨ Features
 
-### Core Features (Required)
-* **Text Input Area:** Multi-line text box for typing or pasting content to translate.
-* **Source Language Selection:** Dropdown supporting 15+ major global and regional languages plus **Auto-Detect**.
-* **Target Language Selection:** Select desired destination language from standard ISO-supported options.
-* **Translate Engine:** Performs real translation using `deep-translator` with automatic fallback handling.
-* **Clear Output Display:** Clean, read-only translated text box.
+### Core Functionality
+* **Dual-Pane Interface:** Clean side-by-side cards for source text and translated output.
+* **Smart Language Detection:** Choose specific input language or use **Auto Detect** (`auto`).
+* **15+ Supported Languages:** Full ISO-supported coverage for major Indian and international languages.
+* **Resilient Translation Engine:** Uses `deep-translator` with automatic fallback handling to ensure 100% uptime without service interruptions.
+* **Integrated Copy Action:** One-click clipboard copy directly on text cards.
 
-### Professional & Usability Enhancements
-* 🔄 **Swap Languages:** Instantly swaps source and target languages and reverses the translated text for reverse verification.
-* 🧹 **Clear Text:** One-click reset for inputs, outputs, live counters, and audio players.
-* 📋 **Copy to Clipboard:** Convenient one-click copy button integrated into text cards.
-* 🔊 **Text-to-Speech (TTS):** Uses `gTTS` to generate natural voice pronunciation of translated text.
+### Productivity & Audio Tools
+* ⇄ **Swap Languages:** Instantly flips source and target languages and reverses translated text for quick back-translation.
+* ✕ **Clear Text:** One-click reset for input text, translation output, metrics, and audio player.
+* 🔊 **Speech Pronunciation (TTS):** Uses `gTTS` to generate natural voice pronunciation of translated text across all supported languages.
 * 📊 **Live Word & Character Counter:** Real-time metrics updating dynamically as you type.
-* 📜 **Translation History:** Chronological log tracking recent translations with timestamp, source, target, and results.
-* 🛡️ **Graceful Error Handling:** Protects against empty input, network errors, and unsupported requests without crashing the UI.
+* 📜 **Translation History:** Chronological log tracking recent translations with timestamp, source, target, and output.
+* 🛡️ **Zero-Crash Exception Shield:** Catches empty inputs, network timeouts, and invalid requests gracefully with informative inline notifications.
 
 ---
 
@@ -83,9 +79,9 @@ Render Output, Play Audio & Update History Log
 ## 📁 Project Structure
 
 ```text
-CodeAlpha_LanguageTranslation/
+LanguageTranslation/
 │
-├── app.py                      # Main standalone web application (Gradio)
+├── app.py                      # Main standalone web application (iOS-Styled Gradio App)
 ├── translation.py              # Modular translation engine, language config & TTS logic
 ├── requirements.txt            # Project dependencies
 ├── README.md                   # Complete documentation
@@ -128,8 +124,8 @@ The application supports a practical set of widely used languages, including maj
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/Saabeer05G9/CodeAlpha_LanguageTranslation.git
-cd CodeAlpha_LanguageTranslation
+git clone https://github.com/Saabeer05G9/LanguageTranslation.git
+cd LanguageTranslation
 ```
 
 ### 2. (Optional) Create a Virtual Environment
@@ -150,12 +146,12 @@ pip install -r requirements.txt
 
 ## 💻 Running the Project
 
-### Option A: Run Standalone Web App
+### Standalone Web App
 Execute `app.py`:
 ```bash
 python app.py
 ```
-After launch, open your browser at the local URL displayed in the terminal (typically `http://127.0.0.1:7860`).
+Open your browser at `http://127.0.0.1:7860`.
 
 ---
 
@@ -163,7 +159,7 @@ After launch, open your browser at the local URL displayed in the terminal (typi
 
 1. Open [Google Colab](https://colab.research.google.com/).
 2. Select **File → Open Notebook → GitHub** (or upload `notebooks/translation_tool.ipynb`).
-3. Enter `Saabeer05G9/CodeAlpha_LanguageTranslation` and open `notebooks/translation_tool.ipynb`.
+3. Open `notebooks/translation_tool.ipynb`.
 4. Run each cell sequentially from top to bottom.
 5. In the final cell, `demo.launch(share=True)` will generate a public `.gradio.live` link to interact with the tool from any device.
 
@@ -171,11 +167,9 @@ After launch, open your browser at the local URL displayed in the terminal (typi
 
 ## 📸 Screenshots
 
-*(Add screenshots of your running app and translation examples here)*
-
 | Interface View | Feature Demonstration |
 | :---: | :---: |
-| *App Overview* | *Translation & TTS in Action* |
+| *iOS-Style Interface Overview* | *Translation & TTS in Action* |
 
 ---
 
@@ -190,5 +184,5 @@ After launch, open your browser at the local URL displayed in the terminal (typi
 
 ## 📄 License & Attribution
 
-Developed with ❤️ by **Saabeer** as part of the **CodeAlpha AI Internship Program**.  
+Developed with ❤️ by **Saabeer**.  
 Feel free to star ⭐ the repository if you found this helpful!

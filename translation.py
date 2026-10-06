@@ -1,5 +1,5 @@
 """
-CodeAlpha AI Internship — Task 1: Language Translation Tool
+AI Language Translation Tool
 Module: translation.py
 
 This module contains the core translation engine and language configuration.
@@ -22,7 +22,7 @@ from gtts import gTTS
 # Language Configuration
 # -------------------------------------------------------------------------
 # Supported language names mapped to standard ISO language codes for GoogleTranslator.
-# Includes all 15 required languages specified by the internship task.
+# Includes 15+ major global and regional languages.
 SUPPORTED_LANGUAGES: Dict[str, str] = {
     "English": "en",
     "Telugu": "te",

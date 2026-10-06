@@ -6,7 +6,7 @@ An intuitive, AI-powered multi-language translation web application featuring an
 
 ## 📖 Project Overview
 
-**Translate AI** is designed to provide seamless, reliable translation across 15+ major languages with the polish and responsiveness of a native iOS application. In addition to high-fidelity text translation, the application includes natural speech pronunciation (TTS), dynamic word and character counters, instant language swapping, and an ongoing translation history log.
+**Translate AI** is designed to provide seamless, reliable translation across 130+ languages worldwide with the polish and responsiveness of a native iOS application. In addition to high-fidelity text translation, the application includes natural speech pronunciation (TTS), dynamic word and character counters, instant language swapping, and an ongoing translation history log.
 
 The project is structured to run smoothly in both local environments (`app.py`) and cloud runtimes like **Google Colab** (`notebooks/translation_tool.ipynb`).
 
@@ -26,7 +26,7 @@ The project is structured to run smoothly in both local environments (`app.py`) 
 ### Core Functionality
 * **Dual-Pane Interface:** Clean side-by-side cards for source text and translated output.
 * **Smart Language Detection:** Choose specific input language or use **Auto Detect** (`auto`).
-* **15+ Supported Languages:** Full ISO-supported coverage for major Indian and international languages.
+* **130+ Supported Languages:** Comprehensive ISO-supported coverage for over 130 global, national, and regional languages.
 * **Resilient Translation Engine:** Uses `deep-translator` with automatic fallback handling to ensure 100% uptime without service interruptions.
 * **Integrated Copy Action:** One-click clipboard copy directly on text cards.
 
@@ -97,26 +97,25 @@ LanguageTranslation/
 
 ---
 
-## 🌍 Supported Languages
+## 🌍 Supported Languages (130+ Languages)
 
-The application supports a practical set of widely used languages, including major Indian and international languages:
+The application supports over **130+ languages** worldwide with smart instant search and dynamic fallback. Key priority languages featured prominently at the top of the selector include:
 
-1. **English** (`en`)
-2. **Telugu** (`te`)
-3. **Hindi** (`hi`)
-4. **Tamil** (`ta`)
-5. **Kannada** (`kn`)
-6. **Malayalam** (`ml`)
-7. **Marathi** (`mr`)
-8. **Bengali** (`bn`)
-9. **Gujarati** (`gu`)
-10. **Spanish** (`es`)
-11. **French** (`fr`)
-12. **German** (`de`)
-13. **Japanese** (`ja`)
-14. **Chinese (Simplified)** (`zh-CN`)
-15. **Arabic** (`ar`)
-* *Source language also supports **Auto Detect** (`auto`).*
+| Language | ISO Code | Language | ISO Code | Language | ISO Code |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **English** | `en` | **Telugu** | `te` | **Hindi** | `hi` |
+| **Tamil** | `ta` | **Kannada** | `kn` | **Malayalam** | `ml` |
+| **Marathi** | `mr` | **Bengali** | `bn` | **Gujarati** | `gu` |
+| **Punjabi** | `pa` | **Urdu** | `ur` | **Spanish** | `es` |
+| **French** | `fr` | **German** | `de` | **Italian** | `it` |
+| **Portuguese** | `pt` | **Russian** | `ru` | **Japanese** | `ja` |
+| **Chinese (Simplified)** | `zh-CN` | **Chinese (Traditional)** | `zh-TW` | **Korean** | `ko` |
+| **Arabic** | `ar` | **Turkish** | `tr` | **Dutch** | `nl` |
+| **Vietnamese** | `vi` | **Thai** | `th` | **Indonesian** | `id` |
+
+*Plus 100+ additional languages alphabetically accessible via the searchable dropdown (Afrikaans, Albanian, Amharic, Armenian, Basque, Bosnian, Bulgarian, Catalan, Croatian, Czech, Danish, Filipino, Finnish, Greek, Hebrew, Hungarian, Irish, Latin, Norwegian, Polish, Romanian, Swedish, Ukrainian, Welsh, Zulu, and more).*
+
+* **Source language also supports **Auto Detect** (`auto`).*
 
 ---
 

@@ -368,7 +368,7 @@ def create_app() -> gr.Blocks:
         <div class="apple-header">
             <span class="apple-pill-tag">✦ Neural Engine</span>
             <h1 class="apple-title">Translate</h1>
-            <p class="apple-subtitle">Instant speech and text translation across 15+ languages</p>
+            <p class="apple-subtitle">Instant speech and text translation across 130+ languages</p>
         </div>
         """)
 

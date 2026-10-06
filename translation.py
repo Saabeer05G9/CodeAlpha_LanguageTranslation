@@ -4,11 +4,12 @@ Module: translation.py
 
 This module contains the core translation engine and language configuration.
 It keeps the translation business logic separate from any user interface (Gradio/Web).
+Supports 130+ languages dynamically via GoogleTranslator and MyMemoryTranslator fallback.
 """
 
 import os
 import tempfile
-from typing import Tuple, Dict, Optional
+from typing import Tuple, Dict, Optional, List
 from deep_translator import GoogleTranslator, MyMemoryTranslator
 from deep_translator.exceptions import (
     TooManyRequests,
@@ -19,57 +20,132 @@ from deep_translator.exceptions import (
 from gtts import gTTS
 
 # -------------------------------------------------------------------------
-# Language Configuration
+# Dynamic Language Configuration (130+ Languages)
 # -------------------------------------------------------------------------
-# Supported language names mapped to standard ISO language codes for GoogleTranslator.
-# Includes 15+ major global and regional languages.
-SUPPORTED_LANGUAGES: Dict[str, str] = {
-    "English": "en",
-    "Telugu": "te",
-    "Hindi": "hi",
-    "Tamil": "ta",
-    "Kannada": "kn",
-    "Malayalam": "ml",
-    "Marathi": "mr",
-    "Bengali": "bn",
-    "Gujarati": "gu",
-    "Spanish": "es",
-    "French": "fr",
-    "German": "de",
-    "Japanese": "ja",
-    "Chinese": "zh-CN",
-    "Arabic": "ar"
+
+# Retrieve native list of all 133 supported languages from deep-translator
+_RAW_GOOGLE_LANGS: Dict[str, str] = GoogleTranslator().get_supported_languages(as_dict=True)
+
+def _format_display_name(raw_name: str) -> str:
+    """
+    Formats raw deep-translator language keys into clean, professional title case.
+    E.g., 'chinese (simplified)' -> 'Chinese (Simplified)'
+    """
+    return " ".join(
+        part.capitalize() if not part.startswith("(") else f"({part[1:].capitalize()}"
+        for part in raw_name.split()
+    )
+
+# Curated priority languages placed at the top of dropdown menus for fast access
+_PRIORITY_ORDER: List[str] = [
+    "English",
+    "Telugu",
+    "Hindi",
+    "Tamil",
+    "Kannada",
+    "Malayalam",
+    "Marathi",
+    "Bengali",
+    "Gujarati",
+    "Punjabi",
+    "Urdu",
+    "Spanish",
+    "French",
+    "German",
+    "Italian",
+    "Portuguese",
+    "Russian",
+    "Japanese",
+    "Chinese (Simplified)",
+    "Chinese (Traditional)",
+    "Korean",
+    "Arabic",
+    "Turkish",
+    "Dutch",
+    "Vietnamese",
+    "Thai",
+    "Indonesian",
+]
+
+# Formatted full dictionary: Display Name -> ISO language code
+_FORMATTED_ALL_LANGS: Dict[str, str] = {
+    _format_display_name(k): v for k, v in _RAW_GOOGLE_LANGS.items()
 }
 
-# Source languages: includes "Auto Detect" to automatically detect the input language.
+# Construct SUPPORTED_LANGUAGES: priority languages first, then remainder alphabetically
+SUPPORTED_LANGUAGES: Dict[str, str] = {}
+for lang in _PRIORITY_ORDER:
+    if lang in _FORMATTED_ALL_LANGS:
+        SUPPORTED_LANGUAGES[lang] = _FORMATTED_ALL_LANGS[lang]
+
+for lang in sorted(_FORMATTED_ALL_LANGS.keys()):
+    if lang not in SUPPORTED_LANGUAGES:
+        SUPPORTED_LANGUAGES[lang] = _FORMATTED_ALL_LANGS[lang]
+
+# Source languages: includes "Auto Detect" as first option
 SOURCE_LANGUAGES: Dict[str, str] = {
     "Auto Detect": "auto",
     **SUPPORTED_LANGUAGES
 }
 
-# Target languages: cannot be "auto", must be a specific target language.
+# Target languages: all 133 supported languages
 TARGET_LANGUAGES: Dict[str, str] = SUPPORTED_LANGUAGES
 
-# Secondary mapping for MyMemoryTranslator as a reliable fallback
-# when Google Translate scraping is rate-limited (HTTP 429) on certain IPs.
-_MYMEMORY_CODE_MAP: Dict[str, str] = {
-    "auto": "autodetect",
-    "en": "en-GB",
-    "te": "te-IN",
-    "hi": "hi-IN",
-    "ta": "ta-IN",
-    "kn": "kn-IN",
-    "ml": "ml-IN",
-    "mr": "mr-IN",
-    "bn": "bn-IN",
-    "gu": "gu-IN",
-    "es": "es-ES",
-    "fr": "fr-FR",
-    "de": "de-DE",
-    "ja": "ja-JP",
-    "zh-CN": "zh-CN",
-    "ar": "ar-SA"
+# Fast normalized lookup maps for robust resolution
+_NORMALIZED_NAME_TO_CODE: Dict[str, str] = {
+    name.lower().strip(): code for name, code in SUPPORTED_LANGUAGES.items()
 }
+for raw_k, code in _RAW_GOOGLE_LANGS.items():
+    _NORMALIZED_NAME_TO_CODE[raw_k.lower().strip()] = code
+
+# Common language aliases and shortcuts
+_NORMALIZED_NAME_TO_CODE.update({
+    "chinese": "zh-CN",
+    "kurdish": "ckb",
+    "odia": "or",
+    "oriya": "or",
+    "manipuri": "mni-Mtei",
+    "auto": "auto",
+    "autodetect": "auto",
+    "auto detect": "auto",
+})
+
+# Code to display name lookup map
+_CODE_TO_NAME: Dict[str, str] = {
+    code.lower(): name for name, code in SUPPORTED_LANGUAGES.items()
+}
+_CODE_TO_NAME["auto"] = "Auto Detect"
+
+# Fallback mapping for MyMemoryTranslator when Google rate-limits
+_MYMEMORY_LANGUAGE_NAME_MAP: Dict[str, str] = {
+    "aymara": "central aymara",
+    "chichewa": "nyanja",
+    "chinese (simplified)": "chinese simplified",
+    "chinese (traditional)": "chinese traditional",
+    "dhivehi": "maldivian",
+    "haitian creole": "haitian creole french",
+    "igbo": "igbo ig",
+    "irish": "irish gaelic",
+    "kurdish (kurmanji)": "northern kurdish",
+    "kurdish (sorani)": "kurdish sorani",
+    "meiteilon (manipuri)": "manipuri",
+    "myanmar": "burmese",
+    "norwegian": "norwegian bokmål",
+    "odia (oriya)": "odia",
+    "oromo": "west central oromo",
+    "sepedi": "sesotho",
+    "serbian": "serbian cyrillic",
+    "sindhi": "sindhi sd",
+    "tamil": "tamil india",
+    "uyghur": "uyghur ug",
+}
+
+# Supported TTS language codes lookup
+try:
+    from gtts.lang import tts_langs
+    _TTS_SUPPORTED_CODES = set(tts_langs().keys())
+except Exception:
+    _TTS_SUPPORTED_CODES = set()
 
 # Maximum character limit allowed for a single translation request
 MAX_CHAR_LIMIT = 5000
@@ -80,15 +156,15 @@ MAX_CHAR_LIMIT = 5000
 # -------------------------------------------------------------------------
 def get_language_code(language_name_or_code: str, is_source: bool = False) -> str:
     """
-    Converts a friendly language name (e.g. 'Telugu') or code (e.g. 'te')
-    into a valid language code accepted by the translation library.
+    Converts a friendly language name (e.g. 'Telugu', 'Russian') or code (e.g. 'te', 'ru')
+    into a valid ISO code accepted by the translation engine.
     
     Parameters:
         language_name_or_code (str): The language name or code.
         is_source (bool): True if looking up a source language (supports 'auto').
         
     Returns:
-        str: ISO language code (e.g., 'te', 'en', 'auto').
+        str: ISO language code (e.g., 'te', 'ru', 'auto').
         
     Raises:
         ValueError: If the language is not recognized or supported.
@@ -96,20 +172,61 @@ def get_language_code(language_name_or_code: str, is_source: bool = False) -> st
     if not language_name_or_code:
         raise ValueError("Language selection cannot be empty.")
 
-    clean_name = language_name_or_code.strip()
+    clean_str = language_name_or_code.strip()
+    clean_lower = clean_str.lower()
 
-    # If it's already a code in our dictionary values
-    valid_codes = set(SOURCE_LANGUAGES.values()) if is_source else set(TARGET_LANGUAGES.values())
-    if clean_name.lower() in [code.lower() for code in valid_codes]:
-        return clean_name
+    # Handle auto detect for source
+    if clean_lower in ("auto", "auto detect", "autodetect"):
+        if is_source:
+            return "auto"
+        raise ValueError("Target language cannot be 'Auto Detect'. Please choose an explicit target language.")
 
-    # Check against friendly names in our dictionary
-    lang_dict = SOURCE_LANGUAGES if is_source else TARGET_LANGUAGES
-    for name, code in lang_dict.items():
-        if name.lower() == clean_name.lower():
+    # Direct match in normalized name map
+    if clean_lower in _NORMALIZED_NAME_TO_CODE:
+        return _NORMALIZED_NAME_TO_CODE[clean_lower]
+
+    # Check if already a valid ISO code
+    valid_codes = {c.lower() for c in SUPPORTED_LANGUAGES.values()}
+    if clean_lower in valid_codes:
+        return clean_str
+
+    # Partial / substring match fallback
+    for name, code in SUPPORTED_LANGUAGES.items():
+        if clean_lower == name.lower():
             return code
 
     raise ValueError(f"Unsupported language: '{language_name_or_code}'.")
+
+
+def get_language_name(language_code_or_name: str) -> str:
+    """
+    Converts an ISO language code (e.g. 'te', 'ru') or name to its friendly display name.
+    
+    Parameters:
+        language_code_or_name (str): Language code or name.
+        
+    Returns:
+        str: Friendly display name (e.g. 'Telugu', 'Russian', 'Auto Detect').
+    """
+    if not language_code_or_name:
+        return ""
+
+    clean_str = language_code_or_name.strip()
+    clean_lower = clean_str.lower()
+
+    if clean_lower in ("auto", "auto detect", "autodetect"):
+        return "Auto Detect"
+
+    # Direct match in code to name map
+    if clean_lower in _CODE_TO_NAME:
+        return _CODE_TO_NAME[clean_lower]
+
+    # Direct match in display names
+    for name in SUPPORTED_LANGUAGES:
+        if name.lower() == clean_lower:
+            return name
+
+    return clean_str
 
 
 def count_text_stats(text: str) -> Tuple[int, int]:
@@ -142,7 +259,7 @@ def translate_text(
     
     Workflow:
     1. Validates input text (empty check, length check).
-    2. Resolves human-readable language names to ISO codes.
+    2. Resolves human-readable language names to ISO codes across 130+ languages.
     3. Handles identity translation (same source and target language).
     4. Calls GoogleTranslator via deep-translator.
     5. Gracefully falls back to MyMemoryTranslator if Google rate-limits (HTTP 429).
@@ -187,9 +304,16 @@ def translate_text(
     except TooManyRequests:
         # Fallback Engine: MyMemoryTranslator when Google rate-limits
         try:
-            mem_src = _MYMEMORY_CODE_MAP.get(source_code, source_code)
-            mem_tgt = _MYMEMORY_CODE_MAP.get(target_code, target_code)
-            fallback_translator = MyMemoryTranslator(source=mem_src, target=mem_tgt)
+            if source_code == "auto":
+                source_mem = "english"
+            else:
+                source_name = get_language_name(source_code).lower()
+                source_mem = _MYMEMORY_LANGUAGE_NAME_MAP.get(source_name, source_name)
+
+            target_name = get_language_name(target_code).lower()
+            target_mem = _MYMEMORY_LANGUAGE_NAME_MAP.get(target_name, target_name)
+
+            fallback_translator = MyMemoryTranslator(source=source_mem, target=target_mem)
             fallback_translated = fallback_translator.translate(clean_text)
             return fallback_translated if fallback_translated is not None else ""
         except Exception as fallback_err:
@@ -231,8 +355,18 @@ def generate_tts_audio(text: str, target_language: str = "Telugu") -> Optional[s
 
     try:
         lang_code = get_language_code(target_language, is_source=False)
-        # gTTS supports all our 15 ISO language codes
-        tts = gTTS(text=clean_text, lang=lang_code, slow=False)
+        
+        # Check if the code or base language is supported by gTTS
+        if _TTS_SUPPORTED_CODES and lang_code.lower() not in _TTS_SUPPORTED_CODES:
+            # Try 2-letter base code (e.g. 'zh' for 'zh-CN')
+            base_code = lang_code.split("-")[0].lower()
+            if base_code not in _TTS_SUPPORTED_CODES:
+                return None
+            tts_lang = base_code
+        else:
+            tts_lang = lang_code
+
+        tts = gTTS(text=clean_text, lang=tts_lang, slow=False)
         
         # Save audio file to a temporary file
         temp_file = tempfile.NamedTemporaryFile(suffix=".mp3", delete=False)
@@ -244,4 +378,3 @@ def generate_tts_audio(text: str, target_language: str = "Telugu") -> Optional[s
     except Exception as e:
         print(f"[TTS Warning]: Could not generate audio for '{clean_text[:20]}...': {e}")
         return None
-

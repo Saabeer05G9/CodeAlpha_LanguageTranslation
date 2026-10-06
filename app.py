@@ -127,8 +127,7 @@ body {
 /* WindowGlass Card Effect (Translucent + Heavy Backdrop Blur) */
 .glass-card,
 .apple-header,
-.ios-result-section,
-.main-input-card {
+.ios-result-section {
     background: rgba(255, 255, 255, 0.74) !important;
     -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
     backdrop-filter: blur(28px) saturate(190%) !important;
@@ -142,11 +141,30 @@ body {
 
 :is(.dark) .glass-card,
 :is(.dark) .apple-header,
-:is(.dark) .ios-result-section,
-:is(.dark) .main-input-card {
+:is(.dark) .ios-result-section {
     background: rgba(22, 26, 40, 0.78) !important;
     border: 1px solid rgba(255, 255, 255, 0.16) !important;
     box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08) inset !important;
+}
+
+/* Main Input Card: Frosted surface WITHOUT backdrop-filter to keep viewport coordinates for dropdown popover */
+.main-input-card {
+    background: rgba(255, 255, 255, 0.94) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+    border-radius: 24px !important;
+    box-shadow: 0 16px 40px -8px rgba(0, 32, 64, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.8) inset !important;
+    padding: 24px 26px !important;
+    margin-bottom: 20px !important;
+    overflow: visible !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    transform: none !important;
+}
+
+:is(.dark) .main-input-card {
+    background: rgba(22, 26, 42, 0.96) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.16) !important;
+    box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08) inset !important;
 }
 
 /* Ensure Dropdown Floating Menus Are Never Clipped and Always on Top */
@@ -306,22 +324,25 @@ div[data-testid="dropdown"] input[role="combobox"] {
 
 /* Selecting Arrow / Chevron (Prominent, Apple Blue, Elegant) */
 .ios-dropdown-picker .icon-wrap,
-div[data-testid="dropdown"] .icon-wrap {
+div[data-testid="dropdown"] .icon-wrap,
+.icon-wrap.svelte-1xfsv4t {
     position: absolute !important;
-    right: 14px !important;
+    right: 16px !important;
     top: 50% !important;
     transform: translateY(-50%) !important;
-    width: 28px !important;
-    height: 28px !important;
+    width: 32px !important;
+    height: 32px !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     pointer-events: none !important;
     color: #007AFF !important;
+    opacity: 0.9 !important;
 }
 
 :is(.dark) .ios-dropdown-picker .icon-wrap,
-:is(.dark) div[data-testid="dropdown"] .icon-wrap {
+:is(.dark) div[data-testid="dropdown"] .icon-wrap,
+:is(.dark) .icon-wrap.svelte-1xfsv4t {
     color: #5AC8FA !important;
 }
 
@@ -330,11 +351,12 @@ div[data-testid="dropdown"] svg.dropdown-arrow,
 .ios-dropdown-picker .icon-wrap svg,
 div[data-testid="dropdown"] .icon-wrap svg,
 .ios-dropdown-picker svg,
-div[data-testid="dropdown"] svg {
-    width: 22px !important;
-    height: 22px !important;
-    min-width: 22px !important;
-    min-height: 22px !important;
+div[data-testid="dropdown"] svg,
+.icon-wrap.svelte-1xfsv4t svg {
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    min-height: 24px !important;
     fill: currentColor !important;
     color: #007AFF !important;
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
@@ -345,7 +367,8 @@ div[data-testid="dropdown"] svg {
 :is(.dark) .ios-dropdown-picker .icon-wrap svg,
 :is(.dark) div[data-testid="dropdown"] .icon-wrap svg,
 :is(.dark) .ios-dropdown-picker svg,
-:is(.dark) div[data-testid="dropdown"] svg {
+:is(.dark) div[data-testid="dropdown"] svg,
+:is(.dark) .icon-wrap.svelte-1xfsv4t svg {
     color: #5AC8FA !important;
 }
 
@@ -367,7 +390,9 @@ ul.options,
 .dropdown-menu,
 div[role="listbox"],
 ul[role="listbox"] {
+    position: fixed !important;
     z-index: 999999 !important;
+    pointer-events: auto !important;
     max-height: 480px !important;
     min-height: 260px !important;
     min-width: 320px !important;
@@ -428,12 +453,68 @@ li[data-testid="dropdown-option"],
     transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease !important;
 }
 
+/* CRITICAL: Delegate all clicks on child spans / text directly to the <li> with data-index */
+li.item *,
+.item *,
+[role="option"] *,
+li[data-testid="dropdown-option"] *,
+.item.svelte-1ou0lab *,
+.inner-item,
+.inner-item *,
+.inner-item.svelte-1ou0lab,
+.inner-item.svelte-1ou0lab * {
+    pointer-events: none !important;
+}
+
 :is(.dark) li.item,
 :is(.dark) .item,
 :is(.dark) [role="option"],
 :is(.dark) li[data-testid="dropdown-option"],
 :is(.dark) .item.svelte-1ou0lab {
     color: #F2F2F7 !important;
+}
+
+/* Quick-Select Pills */
+.quick-pills-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-bottom: 12px !important;
+    flex-wrap: wrap !important;
+}
+.pills-label {
+    font-size: 0.84rem !important;
+    color: #007AFF !important;
+    font-weight: 700 !important;
+    margin-right: 4px !important;
+}
+:is(.dark) .pills-label {
+    color: #5AC8FA !important;
+}
+.lang-pill-btn {
+    border-radius: 9999px !important;
+    padding: 3px 12px !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    background: rgba(0, 122, 255, 0.09) !important;
+    border: 1px solid rgba(0, 122, 255, 0.22) !important;
+    color: #007AFF !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease !important;
+}
+.lang-pill-btn:hover {
+    background: #007AFF !important;
+    color: #FFFFFF !important;
+    transform: translateY(-1px) !important;
+}
+:is(.dark) .lang-pill-btn {
+    background: rgba(10, 132, 255, 0.18) !important;
+    border-color: rgba(90, 200, 250, 0.3) !important;
+    color: #5AC8FA !important;
+}
+:is(.dark) .lang-pill-btn:hover {
+    background: #0A84FF !important;
+    color: #FFFFFF !important;
 }
 
 /* Hover and Selected States */
@@ -649,6 +730,56 @@ button[variant="stop"] {
 }
 """
 
+# -------------------------------------------------------------------------
+# Client-Side Event Delegator (Injected via launch(head=...))
+# Guarantees that clicks on inner spans/text always set data-index,
+# and clicking anywhere on the selector box opens the dropdown list.
+# -------------------------------------------------------------------------
+DROPDOWN_FIX_JS = """
+<script>
+(function() {
+    // 1. Guarantee option clicks land on or have valid data-index
+    function fixDropdownTarget(e) {
+        var target = e.target;
+        if (!target) return;
+        if (target.nodeType === 3) {
+            target = target.parentElement;
+        }
+        if (!target) return;
+
+        // Check if click is on or inside an option item
+        var li = target.closest('li[data-index], [role="option"][data-index], .item[data-index], li[data-testid="dropdown-option"][data-index]');
+        if (li && li.dataset && li.dataset.index !== undefined) {
+            if (target !== li && target.dataset) {
+                target.dataset.index = li.dataset.index;
+            }
+        }
+    }
+
+    // 2. Guarantee touching/clicking anywhere on the selector box opens the dropdown
+    function handleDropdownWrapClick(e) {
+        var wrap = e.target.closest('.ios-dropdown-picker .wrap, div[data-testid="dropdown"] .wrap, .ios-dropdown-picker');
+        if (wrap) {
+            // Do not steal focus if user is already clicking inside the open listbox menu
+            if (!e.target.closest('.options, [role="listbox"], ul.options')) {
+                var input = wrap.querySelector('input[role="combobox"], input');
+                if (input && document.activeElement !== input) {
+                    input.focus();
+                }
+            }
+        }
+    }
+
+    // Capture phase listeners (runs before Gradio's internal handlers)
+    window.addEventListener('mousedown', fixDropdownTarget, true);
+    window.addEventListener('pointerdown', fixDropdownTarget, true);
+    window.addEventListener('touchstart', fixDropdownTarget, true);
+    window.addEventListener('click', fixDropdownTarget, true);
+    window.addEventListener('click', handleDropdownWrapClick, true);
+})();
+</script>
+"""
+
 
 # -------------------------------------------------------------------------
 # UI Event Handlers
@@ -784,7 +915,7 @@ def create_app() -> gr.Blocks:
         """)
 
         # 2. Main Input Card: Language Selectors & Text Input Box
-        with gr.Column(elem_classes=["glass-card", "main-input-card"]):
+        with gr.Column(elem_classes=["main-input-card"]):
             with gr.Row(elem_classes=["language-picker-row"]):
                 source_dropdown = gr.Dropdown(
                     choices=source_choices,
@@ -808,6 +939,32 @@ def create_app() -> gr.Blocks:
                     num_choices_shown=None,
                     elem_classes=["ios-dropdown-picker"]
                 )
+
+            # Quick-Select Apple Pills for instant 1-tap switching
+            with gr.Row(elem_classes=["quick-pills-row"]):
+                gr.Markdown("✦ **Quick From:**", elem_classes=["pills-label"])
+                auto_src_btn = gr.Button("Auto Detect", size="sm", elem_classes=["lang-pill-btn"])
+                en_src_btn = gr.Button("English", size="sm", elem_classes=["lang-pill-btn"])
+                es_src_btn = gr.Button("Spanish", size="sm", elem_classes=["lang-pill-btn"])
+                fr_src_btn = gr.Button("French", size="sm", elem_classes=["lang-pill-btn"])
+                de_src_btn = gr.Button("German", size="sm", elem_classes=["lang-pill-btn"])
+                hi_src_btn = gr.Button("Hindi", size="sm", elem_classes=["lang-pill-btn"])
+                te_src_btn = gr.Button("Telugu", size="sm", elem_classes=["lang-pill-btn"])
+
+            with gr.Row(elem_classes=["quick-pills-row"]):
+                gr.Markdown("✦ **Quick To:**", elem_classes=["pills-label"])
+                te_tgt_btn = gr.Button("Telugu", size="sm", elem_classes=["lang-pill-btn"])
+                hi_tgt_btn = gr.Button("Hindi", size="sm", elem_classes=["lang-pill-btn"])
+                ta_tgt_btn = gr.Button("Tamil", size="sm", elem_classes=["lang-pill-btn"])
+                kn_tgt_btn = gr.Button("Kannada", size="sm", elem_classes=["lang-pill-btn"])
+                ml_tgt_btn = gr.Button("Malayalam", size="sm", elem_classes=["lang-pill-btn"])
+                bn_tgt_btn = gr.Button("Bengali", size="sm", elem_classes=["lang-pill-btn"])
+                es_tgt_btn = gr.Button("Spanish", size="sm", elem_classes=["lang-pill-btn"])
+                fr_tgt_btn = gr.Button("French", size="sm", elem_classes=["lang-pill-btn"])
+                de_tgt_btn = gr.Button("German", size="sm", elem_classes=["lang-pill-btn"])
+                ja_tgt_btn = gr.Button("Japanese", size="sm", elem_classes=["lang-pill-btn"])
+                ar_tgt_btn = gr.Button("Arabic", size="sm", elem_classes=["lang-pill-btn"])
+                ru_tgt_btn = gr.Button("Russian", size="sm", elem_classes=["lang-pill-btn"])
 
             input_text = gr.Textbox(
                 label="Source Text",
@@ -929,6 +1086,29 @@ def create_app() -> gr.Blocks:
             outputs=[history_table, history_state]
         )
 
+        # Quick-Select Source Pill Buttons (Instant 1-Tap Switching)
+        auto_src_btn.click(fn=lambda: "Auto Detect", inputs=[], outputs=[source_dropdown])
+        en_src_btn.click(fn=lambda: "English", inputs=[], outputs=[source_dropdown])
+        es_src_btn.click(fn=lambda: "Spanish", inputs=[], outputs=[source_dropdown])
+        fr_src_btn.click(fn=lambda: "French", inputs=[], outputs=[source_dropdown])
+        de_src_btn.click(fn=lambda: "German", inputs=[], outputs=[source_dropdown])
+        hi_src_btn.click(fn=lambda: "Hindi", inputs=[], outputs=[source_dropdown])
+        te_src_btn.click(fn=lambda: "Telugu", inputs=[], outputs=[source_dropdown])
+
+        # Quick-Select Target Pill Buttons (Instant 1-Tap Switching)
+        te_tgt_btn.click(fn=lambda: "Telugu", inputs=[], outputs=[target_dropdown])
+        hi_tgt_btn.click(fn=lambda: "Hindi", inputs=[], outputs=[target_dropdown])
+        ta_tgt_btn.click(fn=lambda: "Tamil", inputs=[], outputs=[target_dropdown])
+        kn_tgt_btn.click(fn=lambda: "Kannada", inputs=[], outputs=[target_dropdown])
+        ml_tgt_btn.click(fn=lambda: "Malayalam", inputs=[], outputs=[target_dropdown])
+        bn_tgt_btn.click(fn=lambda: "Bengali", inputs=[], outputs=[target_dropdown])
+        es_tgt_btn.click(fn=lambda: "Spanish", inputs=[], outputs=[target_dropdown])
+        fr_tgt_btn.click(fn=lambda: "French", inputs=[], outputs=[target_dropdown])
+        de_tgt_btn.click(fn=lambda: "German", inputs=[], outputs=[target_dropdown])
+        ja_tgt_btn.click(fn=lambda: "Japanese", inputs=[], outputs=[target_dropdown])
+        ar_tgt_btn.click(fn=lambda: "Arabic", inputs=[], outputs=[target_dropdown])
+        ru_tgt_btn.click(fn=lambda: "Russian", inputs=[], outputs=[target_dropdown])
+
     return demo
 
 
@@ -939,4 +1119,4 @@ if __name__ == "__main__":
     app = create_app()
     print("Launching Apple iOS-Style AI Language Translation Tool...")
     theme = get_ios_theme()
-    app.launch(theme=theme, css=APPLE_IOS_CSS, share=False, allowed_paths=["assets"])
+    app.launch(theme=theme, css=APPLE_IOS_CSS, head=DROPDOWN_FIX_JS, share=False, allowed_paths=["assets"])

@@ -5,10 +5,10 @@ Application: app.py
 Author: Saabeer
 Project: LanguageTranslation
 Description:
-A native Apple iOS-inspired Language Translation application built with
-Python, Gradio, deep-translator, and Google Text-to-Speech (gTTS).
-Features a streamlined iOS 18 layout: Language selectors & Input Card at top,
-Primary Translate button, animated Spring Transition Result Card, and Inset Grouped History.
+A refined, high-contrast Apple iOS-inspired Language Translation application
+built with Python, Gradio, deep-translator, and Google Text-to-Speech (gTTS).
+Features high-contrast text visibility, native Apple SF Pro typography,
+and the requested sequential layout with animated spring transition.
 """
 
 import inspect
@@ -27,366 +27,214 @@ from translation import (
 
 
 # -------------------------------------------------------------------------
-# Native Apple iOS Human Interface Guidelines Styling (CSS)
+# Apple iOS Theme Tokens (Gradio Theme Engine)
+# Ensures 100% high-contrast readability in both Light and Dark mode.
+# -------------------------------------------------------------------------
+def get_ios_theme() -> gr.themes.Soft:
+    """
+    Constructs a native Apple iOS theme with high-contrast text and surfaces.
+    """
+    theme = gr.themes.Soft(
+        primary_hue="blue",
+        secondary_hue="slate",
+        neutral_hue="slate",
+        radius_size="lg",
+        text_size="md",
+        font=[
+            "-apple-system",
+            "BlinkMacSystemFont",
+            "SF Pro Text",
+            "SF Pro Display",
+            "Helvetica Neue",
+            "sans-serif"
+        ]
+    ).set(
+        # Canvas Background
+        body_background_fill="#F2F2F7",
+        body_background_fill_dark="#000000",
+        
+        # Inset Grouped Card Fill
+        block_background_fill="#FFFFFF",
+        block_background_fill_dark="#1C1C1E",
+        block_border_width="1px",
+        block_border_color="rgba(60, 60, 67, 0.15)",
+        block_border_color_dark="rgba(255, 255, 255, 0.15)",
+        block_radius="18px",
+        block_shadow="0 4px 20px rgba(0, 0, 0, 0.04)",
+        
+        # Primary Action Button (Apple System Blue)
+        button_primary_background_fill="#007AFF",
+        button_primary_background_fill_hover="#0062CC",
+        button_primary_text_color="#FFFFFF",
+        
+        # Secondary Action Buttons (Apple System Gray Fill)
+        button_secondary_background_fill="#E5E5EA",
+        button_secondary_background_fill_dark="#2C2C2E",
+        button_secondary_text_color="#007AFF",
+        button_secondary_text_color_dark="#0A84FF",
+        
+        # Form Inputs (High-Contrast White / Dark Fill)
+        input_background_fill="#FFFFFF",
+        input_background_fill_dark="#2C2C2E",
+        input_border_color="rgba(60, 60, 67, 0.20)",
+        input_border_color_dark="rgba(255, 255, 255, 0.20)",
+        input_radius="14px"
+    )
+    return theme
+
+
+# -------------------------------------------------------------------------
+# Apple iOS Custom CSS (Enhancements & Transitions)
 # -------------------------------------------------------------------------
 APPLE_IOS_CSS = """
-/* =========================================================================
-   Apple iOS 18 Design System (Human Interface Guidelines)
-   ========================================================================= */
-
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-
-:root {
-    --ios-bg: #F2F2F7;
-    --ios-card: #FFFFFF;
-    --ios-blue: #007AFF;
-    --ios-blue-pressed: #0062CC;
-    --ios-blue-light: rgba(0, 122, 255, 0.09);
-    --ios-gray-fill: #E5E5EA;
-    --ios-gray-fill-hover: #D1D1D6;
-    --ios-secondary-text: #8E8E93;
-    --ios-primary-text: #1C1C1E;
-    --ios-separator: rgba(60, 60, 67, 0.08);
-    --ios-pill: 9999px;
-    --ios-card-radius: 22px;
-}
-
-/* Global Reset & Page Canvas */
-body, html {
-    background-color: var(--ios-bg) !important;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Plus Jakarta Sans", "Helvetica Neue", sans-serif !important;
-    -webkit-font-smoothing: antialiased;
-    margin: 0;
-    padding: 0;
-}
-
+/* Container Layout */
 .gradio-container {
-    max-width: 860px !important;
-    margin: 24px auto 48px auto !important;
+    max-width: 820px !important;
+    margin: 20px auto 40px auto !important;
     padding: 0 16px !important;
-    background: transparent !important;
 }
 
-/* Remove default Gradio block frames */
-.block {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    padding: 0 !important;
-}
-
-/* -------------------------------------------------------------------------
-   1. Apple Navigation Header / Dynamic Island Pill
-   ------------------------------------------------------------------------- */
-.apple-nav-header {
+/* Apple Header Banner */
+.apple-header {
     text-align: center;
-    padding: 24px 20px 20px 20px;
+    padding: 22px 16px;
+    background: #FFFFFF;
+    border-radius: 20px;
+    border: 1px solid rgba(60, 60, 67, 0.12);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
     margin-bottom: 20px;
-    background: var(--ios-card);
-    border-radius: var(--ios-card-radius);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.02);
-    border: 1px solid var(--ios-separator);
 }
 
-.apple-status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--ios-blue-light);
-    color: var(--ios-blue);
-    padding: 5px 14px;
-    border-radius: var(--ios-pill);
+:is(.dark) .apple-header {
+    background: #1C1C1E !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.apple-pill-tag {
+    display: inline-block;
+    background: rgba(0, 122, 255, 0.10);
+    color: #007AFF;
+    padding: 4px 14px;
+    border-radius: 9999px;
     font-size: 0.78rem;
     font-weight: 700;
     letter-spacing: 0.4px;
     text-transform: uppercase;
     margin-bottom: 8px;
-    border: 1px solid rgba(0, 122, 255, 0.14);
 }
 
-.apple-app-title {
-    font-size: 2.3rem !important;
+.apple-title {
+    font-size: 2.2rem !important;
     font-weight: 800 !important;
-    letter-spacing: -0.7px !important;
-    color: var(--ios-primary-text) !important;
-    margin: 0 !important;
+    letter-spacing: -0.6px !important;
+    margin: 2px 0 6px 0 !important;
     line-height: 1.15;
 }
 
-.apple-app-subtitle {
+.apple-subtitle {
     font-size: 0.96rem !important;
-    color: var(--ios-secondary-text) !important;
-    margin: 4px 0 0 0 !important;
-    font-weight: 400;
+    color: #8E8E93 !important;
+    margin: 0 !important;
 }
 
-/* -------------------------------------------------------------------------
-   2. Input Card & Language Selector Bar
-   ------------------------------------------------------------------------- */
-.apple-input-card {
-    background: var(--ios-card) !important;
-    border-radius: var(--ios-card-radius) !important;
-    padding: 22px 24px !important;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02) !important;
-    border: 1px solid var(--ios-separator) !important;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    margin-bottom: 16px !important;
-}
-
-.apple-input-card:focus-within {
-    border-color: var(--ios-blue) !important;
-    box-shadow: 0 6px 28px rgba(0, 122, 255, 0.12), 0 1px 4px rgba(0, 122, 255, 0.06) !important;
-}
-
-/* Apple Language Picker Segment */
-.apple-lang-row {
-    margin-bottom: 14px !important;
-    gap: 12px !important;
-}
-
-.apple-picker-label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    color: var(--ios-secondary-text);
-    text-transform: uppercase;
-    margin-bottom: 4px;
-}
-
-.apple-picker {
-    background: var(--ios-bg) !important;
-    border-radius: 14px !important;
-    border: 1px solid var(--ios-separator) !important;
-    padding: 2px 8px !important;
-    font-weight: 600 !important;
-}
-
-.apple-picker .wrap {
-    border: none !important;
-    box-shadow: none !important;
-    background: transparent !important;
-}
-
-/* Frameless Textarea */
-.apple-input-card textarea {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", sans-serif !important;
-    font-size: 1.15rem !important;
-    line-height: 1.6 !important;
-    color: var(--ios-primary-text) !important;
-    resize: vertical !important;
-    padding: 6px 0 !important;
-}
-
-.apple-input-card textarea:focus {
-    outline: none !important;
-    box-shadow: none !important;
-}
-
-.apple-input-card textarea::placeholder {
-    color: var(--ios-secondary-text) !important;
-    font-weight: 400 !important;
-}
-
-/* Live Stats Apple Pill */
-.apple-stats-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 12px;
-    background: var(--ios-gray-fill);
-    color: var(--ios-primary-text);
-    border-radius: var(--ios-pill);
-    font-size: 0.8rem;
-    font-weight: 600;
-    margin-top: 6px;
-    width: fit-content;
-}
-
-/* -------------------------------------------------------------------------
-   3. Primary Translate Button (Full Width iOS Pill)
-   ------------------------------------------------------------------------- */
-.apple-primary-btn-row {
-    margin: 10px 0 20px 0 !important;
-}
-
-.apple-btn-primary button, button.apple-primary-action {
-    background: var(--ios-blue) !important;
+/* Apple Primary Button (Full-Width Pill) */
+.apple-translate-btn button {
+    background: #007AFF !important;
     background-image: linear-gradient(180deg, #0A84FF 0%, #007AFF 100%) !important;
     color: #FFFFFF !important;
-    border-radius: var(--ios-pill) !important;
+    border-radius: 9999px !important;
     font-size: 1.1rem !important;
     font-weight: 700 !important;
     letter-spacing: -0.2px !important;
-    padding: 15px 32px !important;
+    padding: 14px 30px !important;
     border: none !important;
-    box-shadow: 0 6px 20px rgba(0, 122, 255, 0.38) !important;
-    transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-shadow: 0 6px 20px rgba(0, 122, 255, 0.35) !important;
+    transition: all 0.15s ease !important;
     cursor: pointer !important;
     width: 100% !important;
 }
 
-.apple-btn-primary button:hover {
+.apple-translate-btn button:hover {
     background-image: linear-gradient(180deg, #007AFF 0%, #0062CC 100%) !important;
     transform: translateY(-1px) !important;
-    box-shadow: 0 8px 24px rgba(0, 122, 255, 0.46) !important;
+    box-shadow: 0 8px 24px rgba(0, 122, 255, 0.42) !important;
 }
 
-.apple-btn-primary button:active {
+.apple-translate-btn button:active {
     transform: scale(0.97) !important;
     box-shadow: 0 2px 8px rgba(0, 122, 255, 0.2) !important;
 }
 
-/* -------------------------------------------------------------------------
-   4. Translation Result Card (iOS Spring Reveal Animation)
-   ------------------------------------------------------------------------- */
-@keyframes iosSpringReveal {
+/* Result Card with Smooth Spring Transition */
+@keyframes iosReveal {
     0% {
         opacity: 0;
-        transform: translateY(22px) scale(0.97);
-    }
-    65% {
-        opacity: 1;
-        transform: translateY(-2px) scale(1.004);
+        transform: translateY(18px);
     }
     100% {
         opacity: 1;
-        transform: translateY(0) scale(1);
+        transform: translateY(0);
     }
 }
 
-.ios-result-card {
-    background: var(--ios-card) !important;
-    border-radius: var(--ios-card-radius) !important;
-    padding: 22px 24px !important;
-    box-shadow: 0 8px 30px rgba(0, 122, 255, 0.08), 0 2px 8px rgba(0, 0, 0, 0.03) !important;
-    border: 1.5px solid rgba(0, 122, 255, 0.22) !important;
-    animation: iosSpringReveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
-    margin-bottom: 22px !important;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.ios-result-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--ios-blue-light);
-    color: var(--ios-blue);
-    padding: 4px 14px;
-    border-radius: var(--ios-pill);
-    font-size: 0.82rem;
-    font-weight: 700;
-    width: fit-content;
-    letter-spacing: 0.3px;
-    margin-bottom: 6px;
-}
-
-.ios-result-card textarea {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", sans-serif !important;
-    font-size: 1.25rem !important;
-    font-weight: 600 !important;
-    line-height: 1.6 !important;
-    color: var(--ios-primary-text) !important;
-    padding: 4px 0 !important;
-}
-
-.apple-audio-player {
-    border-radius: 14px !important;
-    background: var(--ios-bg) !important;
-    padding: 4px !important;
-    border: 1px solid var(--ios-separator) !important;
-}
-
-/* Secondary Action Buttons (Inside Result Card) */
-.apple-result-actions {
-    margin-top: 10px !important;
-    gap: 10px !important;
-}
-
-.apple-btn-secondary button {
-    background: var(--ios-gray-fill) !important;
-    color: var(--ios-blue) !important;
-    border-radius: var(--ios-pill) !important;
-    font-size: 0.95rem !important;
-    font-weight: 600 !important;
-    padding: 11px 20px !important;
-    border: none !important;
-    box-shadow: none !important;
-    transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    cursor: pointer !important;
-}
-
-.apple-btn-secondary button:hover {
-    background: var(--ios-gray-fill-hover) !important;
-    color: var(--ios-blue-pressed) !important;
-}
-
-.apple-btn-secondary button:active {
-    transform: scale(0.96) !important;
-}
-
-/* -------------------------------------------------------------------------
-   5. Inset Grouped History Section
-   ------------------------------------------------------------------------- */
-.apple-history-accordion {
+.ios-result-section {
+    animation: iosReveal 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
     margin-top: 14px !important;
-    border-radius: var(--ios-card-radius) !important;
-    background: var(--ios-card) !important;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.03) !important;
-    border: 1px solid var(--ios-separator) !important;
-    overflow: hidden !important;
+    margin-bottom: 20px !important;
+    padding: 18px 20px !important;
+    background: #FFFFFF !important;
+    border-radius: 20px !important;
+    border: 1.5px solid rgba(0, 122, 255, 0.25) !important;
+    box-shadow: 0 6px 28px rgba(0, 122, 255, 0.08) !important;
 }
 
-.apple-history-accordion .label-wrap {
-    padding: 16px 20px !important;
-    font-weight: 700 !important;
-    font-size: 1.05rem !important;
-    color: var(--ios-primary-text) !important;
+:is(.dark) .ios-result-section {
+    background: #1C1C1E !important;
+    border-color: rgba(10, 132, 255, 0.35) !important;
 }
 
-.apple-history-table {
-    border-radius: 14px !important;
-    overflow: hidden !important;
-    border: 1px solid var(--ios-separator) !important;
+.ios-result-tag {
+    display: inline-block;
+    background: rgba(0, 122, 255, 0.10);
+    color: #007AFF;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 8px;
 }
 
-/* Destructive Clear History Action */
-.apple-btn-destructive button {
-    background: rgba(255, 59, 48, 0.08) !important;
-    color: #FF3B30 !important;
-    border-radius: var(--ios-pill) !important;
+/* Apple Secondary Pill Buttons */
+button[variant="secondary"] {
+    border-radius: 9999px !important;
     font-weight: 600 !important;
-    font-size: 0.88rem !important;
-    border: 1px solid rgba(255, 59, 48, 0.18) !important;
-    padding: 8px 18px !important;
-    transition: all 0.16s ease !important;
-    cursor: pointer !important;
+    transition: all 0.15s ease !important;
 }
 
-.apple-btn-destructive button:hover {
-    background: rgba(255, 59, 48, 0.15) !important;
+button[variant="secondary"]:active {
+    transform: scale(0.97) !important;
 }
 
-.apple-btn-destructive button:active {
-    transform: scale(0.96) !important;
+/* Destructive Button */
+button[variant="stop"] {
+    border-radius: 9999px !important;
+    font-weight: 600 !important;
 }
 
-/* -------------------------------------------------------------------------
-   6. Apple Minimalist Footer
-   ------------------------------------------------------------------------- */
+/* Input Stats Pill */
+.stats-chip {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #8E8E93;
+    margin-top: 4px;
+}
+
+/* Footer */
 .apple-footer {
     text-align: center;
-    padding: 24px 0 10px 0;
-    color: var(--ios-secondary-text);
-    font-size: 0.84rem;
-    font-weight: 500;
+    padding: 20px 0 8px 0;
+    color: #8E8E93;
+    font-size: 0.82rem;
 }
 """
 
@@ -401,8 +249,7 @@ def on_translate(
     history: List[List[str]]
 ) -> Tuple[gr.update, str, str, Optional[str], str, List[List[str]], List[List[str]]]:
     """
-    Handles translation requests.
-    Reveals the result card with smooth animation and populates translation, audio, and history.
+    Translates input text and reveals the result section in a smooth transition.
     """
     if not text or not text.strip():
         stats = "📊 0 characters • 0 words"
@@ -411,19 +258,19 @@ def on_translate(
     # Perform real translation
     translated = translate_text(text, source_lang, target_lang)
 
-    # Calculate input text metrics
+    # Compute text metrics
     chars, words = count_text_stats(text)
     stats = f"📊 {chars} characters • {words} words"
 
-    # Auto-generate TTS audio if translation was successful
+    # Auto-generate speech audio if translation was successful
     audio_path = None
     if translated and not translated.startswith("Error:") and not translated.startswith("Language Error:"):
         audio_path = generate_tts_audio(translated, target_lang)
 
-    # Result badge label
-    badge_label = f"✦ Translated to {target_lang}"
+    # Result tag
+    badge_label = f"✦ Translation Result ({target_lang})"
 
-    # Log to history
+    # Update history log
     timestamp = datetime.now().strftime("%H:%M:%S")
     new_entry = [timestamp, source_lang, target_lang, text.strip(), translated]
     updated_history = [new_entry] + (history or [])
@@ -439,7 +286,7 @@ def on_swap_languages(
     output_text: str
 ) -> Tuple[str, str, str, str, str, Optional[str], gr.update]:
     """
-    Swaps source and target languages, reversing input/output for instant back-translation.
+    Swaps source and target languages, reversing input/output for instant reverse-translation.
     """
     new_source = target_lang
     new_target = "English" if source_lang == "Auto Detect" else source_lang
@@ -490,16 +337,16 @@ def on_clear_history() -> Tuple[List[List[str]], List[List[str]]]:
 
 
 # -------------------------------------------------------------------------
-# Apple iOS-Styled Gradio Application Builder
+# Application Builder
 # -------------------------------------------------------------------------
 def create_app() -> gr.Blocks:
     """
     Constructs the streamlined Apple iOS translation interface.
-    Follows exact requested sequence:
-    1. Language selectors & Text input card
-    2. Primary Translate button
+    Layout order:
+    1. Language selectors & Text input box (at top)
+    2. Primary Translate button (under that)
     3. Animated Transition Result card (revealed on translate)
-    4. Inset Grouped History section below
+    4. Inset Grouped History section (under that)
     """
     source_choices = list(SOURCE_LANGUAGES.keys())
     target_choices = list(TARGET_LANGUAGES.keys())
@@ -516,118 +363,88 @@ def create_app() -> gr.Blocks:
         # History state management
         history_state = gr.State([])
 
-        # 1. Apple Navigation Header
+        # 1. Navigation Header
         gr.HTML("""
-        <div class="apple-nav-header">
-            <div class="apple-status-pill">✦ Neural Engine</div>
-            <h1 class="apple-app-title">Translate</h1>
-            <p class="apple-app-subtitle">Select languages, enter text, and translate instantly</p>
+        <div class="apple-header">
+            <span class="apple-pill-tag">✦ Neural Engine</span>
+            <h1 class="apple-title">Translate</h1>
+            <p class="apple-subtitle">Instant speech and text translation across 15+ languages</p>
         </div>
         """)
 
         # 2. Main Input Card: Language Selectors & Text Input Box
-        with gr.Column(elem_classes=["apple-input-card"]):
-            # Language Selection Row (From & To)
-            with gr.Row(elem_classes=["apple-lang-row"]):
-                with gr.Column(scale=1):
-                    gr.HTML('<div class="apple-picker-label">Selected Language (From)</div>')
-                    source_dropdown = gr.Dropdown(
-                        choices=source_choices,
-                        value="English",
-                        show_label=False,
-                        elem_classes=["apple-picker"]
-                    )
-                with gr.Column(scale=1):
-                    gr.HTML('<div class="apple-picker-label">Translation Language (To)</div>')
-                    target_dropdown = gr.Dropdown(
-                        choices=target_choices,
-                        value="Telugu",
-                        show_label=False,
-                        elem_classes=["apple-picker"]
-                    )
+        with gr.Group():
+            with gr.Row():
+                source_dropdown = gr.Dropdown(
+                    choices=source_choices,
+                    value="English",
+                    label="Selected Language (From)",
+                    info="Choose input language or Auto Detect"
+                )
+                target_dropdown = gr.Dropdown(
+                    choices=target_choices,
+                    value="Telugu",
+                    label="Translation Language (To)",
+                    info="Choose destination language"
+                )
 
-            # Text Input Box
-            gr.HTML('<div class="apple-picker-label" style="margin-top: 8px;">Text to Translate</div>')
             input_text = gr.Textbox(
+                label="Source Text",
                 placeholder="Type or paste text to translate here...",
-                lines=5,
-                max_lines=10,
-                show_label=False,
+                lines=4,
+                max_lines=8,
                 **copy_kwarg
             )
             stats_display = gr.Markdown(
                 "📊 0 characters • 0 words",
-                elem_classes=["apple-stats-chip"]
+                elem_classes=["stats-chip"]
             )
 
         # 3. Under that: Primary Translate Button
-        with gr.Row(elem_classes=["apple-primary-btn-row"]):
+        with gr.Row(elem_classes=["apple-translate-btn"]):
             translate_btn = gr.Button(
                 "🚀 Translate",
-                variant="primary",
-                elem_classes=["apple-btn-primary"]
+                variant="primary"
             )
 
-        # 4. Under that: Animated Transition Result Card (Revealed after clicking Translate)
-        with gr.Column(visible=False, elem_classes=["ios-result-card"]) as result_card:
+        # 4. Under that: Animated Transition Result Card (Revealed on Translate)
+        with gr.Column(visible=False, elem_classes=["ios-result-section"]) as result_card:
             result_badge = gr.Markdown(
-                "✦ Translated Result",
-                elem_classes=["ios-result-badge"]
+                "✦ Translation Result",
+                elem_classes=["ios-result-tag"]
             )
             output_text = gr.Textbox(
+                label="Translated Text",
                 placeholder="Translation appears here...",
-                lines=5,
-                max_lines=10,
+                lines=4,
+                max_lines=8,
                 interactive=False,
-                show_label=False,
                 **copy_kwarg
             )
             audio_output = gr.Audio(
-                show_label=False,
+                label="🔊 Speech Pronunciation",
                 type="filepath",
-                interactive=False,
-                elem_classes=["apple-audio-player"]
+                interactive=False
             )
-            # Result Card Action Buttons
-            with gr.Row(elem_classes=["apple-result-actions"]):
-                swap_btn = gr.Button(
-                    "⇄ Swap & Reverse",
-                    variant="secondary",
-                    scale=1,
-                    elem_classes=["apple-btn-secondary"]
-                )
-                listen_btn = gr.Button(
-                    "🔊 Re-Play Speech",
-                    variant="secondary",
-                    scale=1,
-                    elem_classes=["apple-btn-secondary"]
-                )
-                clear_btn = gr.Button(
-                    "✕ Clear All",
-                    variant="secondary",
-                    scale=1,
-                    elem_classes=["apple-btn-secondary"]
-                )
+            # Result Action Controls
+            with gr.Row():
+                swap_btn = gr.Button("⇄ Swap Languages", variant="secondary")
+                listen_btn = gr.Button("🔊 Re-Play Speech", variant="secondary")
+                clear_btn = gr.Button("✕ Clear Text", variant="secondary")
 
         # 5. Under that: Inset Grouped History Section
-        with gr.Accordion("Recent Translations", open=True, elem_classes=["apple-history-accordion"]):
+        with gr.Accordion("Recent Translations", open=True):
             history_table = gr.Dataframe(
                 headers=["Time", "From", "To", "Original Text", "Translated Text"],
                 datatype=["str", "str", "str", "str", "str"],
                 value=[],
                 interactive=False,
-                wrap=True,
-                elem_classes=["apple-history-table"]
+                wrap=True
             )
             with gr.Row():
-                clear_history_btn = gr.Button(
-                    "Clear History",
-                    size="sm",
-                    variant="stop",
-                    elem_classes=["apple-btn-destructive"]
-                )
+                clear_history_btn = gr.Button("Clear History", size="sm", variant="stop")
 
-        # 6. Apple Minimalist Footer
+        # 6. Apple Footer
         gr.HTML(
             """
             <div class="apple-footer">
@@ -653,7 +470,7 @@ def create_app() -> gr.Blocks:
             outputs=[result_card, output_text, stats_display, audio_output, result_badge, history_table, history_state]
         )
 
-        # Enter key in text box also triggers translation
+        # Enter key submit also triggers translation
         input_text.submit(
             fn=on_translate,
             inputs=[input_text, source_dropdown, target_dropdown, history_state],
@@ -697,19 +514,5 @@ def create_app() -> gr.Blocks:
 if __name__ == "__main__":
     app = create_app()
     print("Launching Apple iOS-Style AI Language Translation Tool...")
-    # Apple clean soft theme
-    theme = gr.themes.Soft(
-        primary_hue="blue",
-        secondary_hue="slate",
-        neutral_hue="slate",
-        font=[
-            "-apple-system",
-            "BlinkMacSystemFont",
-            "SF Pro Text",
-            "SF Pro Display",
-            gr.themes.GoogleFont("Plus Jakarta Sans"),
-            "sans-serif"
-        ],
-        radius_size=gr.themes.sizes.radius_lg
-    )
+    theme = get_ios_theme()
     app.launch(theme=theme, css=APPLE_IOS_CSS, share=False)

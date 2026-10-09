@@ -5,10 +5,10 @@ Application: app.py
 Author: Saabeer
 Project: LanguageTranslation
 Description:
-A refined, high-contrast Apple iOS-inspired Language Translation application
+A refined, high-contrast Modern WindowGlass Language Translation application
 built with Python, Gradio, deep-translator, and Google Text-to-Speech (gTTS).
-Features high-contrast text visibility, native Apple SF Pro typography,
-and the requested sequential layout with animated spring transition.
+Features high-contrast text visibility, Times New Roman typography,
+and the requested sequential layout with animated transition.
 """
 
 import inspect
@@ -28,12 +28,12 @@ from translation import (
 
 
 # -------------------------------------------------------------------------
-# Apple iOS Theme Tokens (Gradio Theme Engine)
+# Modern WindowGlass Theme Tokens (Gradio Theme Engine)
 # Ensures 100% high-contrast readability in both Light and Dark mode.
 # -------------------------------------------------------------------------
-def get_ios_theme() -> gr.themes.Soft:
+def get_glass_theme() -> gr.themes.Soft:
     """
-    Constructs a native Apple iOS WindowGlass theme with Times New Roman typography,
+    Constructs a modern WindowGlass theme with Times New Roman typography,
     high-contrast text, and generous rounded surfaces.
     """
     theme = gr.themes.Soft(
@@ -64,7 +64,7 @@ def get_ios_theme() -> gr.themes.Soft:
         block_label_text_color="#0F172A",
         block_label_text_color_dark="#FFFFFF",
         
-        # Primary Action Button (Apple System Blue Pill)
+        # Primary Action Button (Modern Blue Pill)
         button_primary_background_fill="#007AFF",
         button_primary_background_fill_hover="#0062CC",
         button_primary_text_color="#FFFFFF",
@@ -92,9 +92,9 @@ def get_ios_theme() -> gr.themes.Soft:
 # -------------------------------------------------------------------------
 # WindowGlass Background & Extended Layout CSS
 # -------------------------------------------------------------------------
-APPLE_IOS_CSS = """
+WINDOW_GLASS_CSS = """
 /* =========================================================================
-   Apple iOS WindowGlass Theme — Refined Typography & Curved Geometry
+   Modern WindowGlass Theme — Refined Typography & Curved Geometry
    Typography: "Times New Roman", Times, Georgia, serif
    ========================================================================= */
 
@@ -141,9 +141,9 @@ body {
 }
 
 /* 4. Unified Section Cards — Perfect Curved Corners (border-radius: 28px) & Alignment */
-.apple-header,
+.app-header,
 .main-input-card,
-.ios-result-section,
+.result-section,
 .history-card {
     border-radius: 28px !important;
     border: 2px solid rgba(255, 255, 255, 0.88) !important;
@@ -155,16 +155,16 @@ body {
     transition: all 0.25s ease !important;
 }
 
-:is(.dark) .apple-header,
+:is(.dark) .app-header,
 :is(.dark) .main-input-card,
-:is(.dark) .ios-result-section,
+:is(.dark) .result-section,
 :is(.dark) .history-card {
     border: 2px solid rgba(255, 255, 255, 0.18) !important;
     box-shadow: 0 18px 45px -10px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.08) inset !important;
 }
 
 /* Header Banner Card */
-.apple-header {
+.app-header {
     background: rgba(255, 255, 255, 0.78) !important;
     -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
     backdrop-filter: blur(28px) saturate(190%) !important;
@@ -172,11 +172,11 @@ body {
     padding: 28px 24px !important;
 }
 
-:is(.dark) .apple-header {
+:is(.dark) .app-header {
     background: rgba(20, 25, 40, 0.82) !important;
 }
 
-.apple-pill-tag {
+.pill-tag {
     display: inline-block;
     background: rgba(0, 122, 255, 0.14) !important;
     color: #0056B3 !important;
@@ -190,13 +190,13 @@ body {
     border: 1.5px solid rgba(0, 122, 255, 0.28) !important;
 }
 
-:is(.dark) .apple-pill-tag {
+:is(.dark) .pill-tag {
     background: rgba(10, 132, 255, 0.22) !important;
     color: #5AC8FA !important;
     border-color: rgba(90, 200, 250, 0.35) !important;
 }
 
-.apple-title {
+.app-title {
     font-size: 2.5rem !important;
     font-weight: 800 !important;
     color: #0F172A !important;
@@ -205,18 +205,18 @@ body {
     line-height: 1.15;
 }
 
-:is(.dark) .apple-title {
+:is(.dark) .app-title {
     color: #FFFFFF !important;
 }
 
-.apple-subtitle {
+.app-subtitle {
     font-size: 1.1rem !important;
     font-weight: 600 !important;
     color: #334155 !important;
     margin: 0 !important;
 }
 
-:is(.dark) .apple-subtitle {
+:is(.dark) .app-subtitle {
     color: #CBD5E1 !important;
 }
 
@@ -233,7 +233,7 @@ body {
 /* Ensure Dropdown Menus Float Unclipped */
 .main-input-card,
 .language-picker-row,
-.ios-dropdown-picker,
+.dropdown-picker,
 .gr-row,
 .gr-form,
 .form,
@@ -249,7 +249,7 @@ body {
     width: 100% !important;
 }
 
-.ios-dropdown-picker {
+.dropdown-picker {
     flex: 1 1 0% !important;
     background: rgba(248, 250, 254, 0.90) !important;
     border: 1.5px solid rgba(0, 122, 255, 0.26) !important;
@@ -260,20 +260,20 @@ body {
     box-sizing: border-box !important;
 }
 
-:is(.dark) .ios-dropdown-picker {
+:is(.dark) .dropdown-picker {
     background: rgba(28, 35, 54, 0.90) !important;
     border-color: rgba(90, 200, 250, 0.26) !important;
 }
 
-.ios-dropdown-picker:hover {
+.dropdown-picker:hover {
     border-color: #007AFF !important;
     box-shadow: 0 6px 22px rgba(0, 122, 255, 0.12) !important;
 }
 
 /* High Contrast Dropdown Labels & Info Text */
-.ios-dropdown-picker label span,
+.dropdown-picker label span,
 .main-input-card label span,
-.ios-result-section label span {
+.result-section label span {
     font-size: 1.18rem !important;
     font-weight: 700 !important;
     color: #0F172A !important;
@@ -282,13 +282,13 @@ body {
     margin-bottom: 4px !important;
 }
 
-:is(.dark) .ios-dropdown-picker label span,
+:is(.dark) .dropdown-picker label span,
 :is(.dark) .main-input-card label span,
-:is(.dark) .ios-result-section label span {
+:is(.dark) .result-section label span {
     color: #FFFFFF !important;
 }
 
-.ios-dropdown-picker .info,
+.dropdown-picker .info,
 .main-input-card .info,
 span[data-testid="block-info"] {
     font-size: 0.98rem !important;
@@ -299,15 +299,15 @@ span[data-testid="block-info"] {
     margin-bottom: 8px !important;
 }
 
-:is(.dark) .ios-dropdown-picker .info,
+:is(.dark) .dropdown-picker .info,
 :is(.dark) .main-input-card .info,
 :is(.dark) span[data-testid="block-info"] {
     color: #CBD5E1 !important;
 }
 
 /* Dropdown Selector Input Element */
-.ios-dropdown-picker .wrap,
-.ios-dropdown-picker div[data-testid="dropdown"] .wrap {
+.dropdown-picker .wrap,
+.dropdown-picker div[data-testid="dropdown"] .wrap {
     min-height: 54px !important;
     background: rgba(255, 255, 255, 0.96) !important;
     border: 1.5px solid rgba(0, 122, 255, 0.35) !important;
@@ -316,13 +316,13 @@ span[data-testid="block-info"] {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03) inset !important;
 }
 
-:is(.dark) .ios-dropdown-picker .wrap {
+:is(.dark) .dropdown-picker .wrap {
     background: rgba(22, 28, 44, 0.96) !important;
     border-color: rgba(255, 255, 255, 0.25) !important;
 }
 
-.ios-dropdown-picker input[role="combobox"],
-.ios-dropdown-picker input {
+.dropdown-picker input[role="combobox"],
+.dropdown-picker input {
     font-size: 1.22rem !important;
     font-weight: 700 !important;
     color: #0F172A !important;
@@ -332,14 +332,14 @@ span[data-testid="block-info"] {
     border: none !important;
 }
 
-:is(.dark) .ios-dropdown-picker input[role="combobox"],
-:is(.dark) .ios-dropdown-picker input {
+:is(.dark) .dropdown-picker input[role="combobox"],
+:is(.dark) .dropdown-picker input {
     color: #FFFFFF !important;
 }
 
 /* Prominent Dropdown Arrow Icon */
-.ios-dropdown-picker svg,
-.ios-dropdown-picker .dropdown-arrow {
+.dropdown-picker svg,
+.dropdown-picker .dropdown-arrow {
     width: 22px !important;
     height: 22px !important;
     color: #007AFF !important;
@@ -351,7 +351,7 @@ span[data-testid="block-info"] {
 /* 6. Source Text Input & Translated Text Input (Generous & High Contrast) */
 textarea,
 .main-input-card textarea,
-.ios-result-section textarea {
+.result-section textarea {
     background: rgba(255, 255, 255, 0.95) !important;
     border: 1.5px solid rgba(0, 122, 255, 0.28) !important;
     border-radius: 18px !important;
@@ -373,7 +373,7 @@ textarea::placeholder {
 
 :is(.dark) textarea,
 :is(.dark) .main-input-card textarea,
-:is(.dark) .ios-result-section textarea {
+:is(.dark) .result-section textarea {
     background: rgba(22, 28, 44, 0.95) !important;
     border-color: rgba(255, 255, 255, 0.22) !important;
     color: #FFFFFF !important;
@@ -402,8 +402,8 @@ textarea::placeholder {
     color: #E2E8F0 !important;
 }
 
-/* 7. Primary Action Button (Apple System Blue Pill) */
-.apple-translate-btn button {
+/* 7. Primary Action Button (Modern Blue Pill) */
+.translate-btn button {
     background: linear-gradient(180deg, #0A84FF 0%, #007AFF 100%) !important;
     color: #FFFFFF !important;
     border-radius: 9999px !important;
@@ -419,19 +419,19 @@ textarea::placeholder {
     height: 60px !important;
 }
 
-.apple-translate-btn button:hover {
+.translate-btn button:hover {
     background: linear-gradient(180deg, #007AFF 0%, #0062CC 100%) !important;
     transform: translateY(-2px) !important;
     box-shadow: 0 14px 36px rgba(0, 122, 255, 0.50), 0 1px 2px rgba(255, 255, 255, 0.6) inset !important;
 }
 
-.apple-translate-btn button:active {
+.translate-btn button:active {
     transform: scale(0.98) !important;
     box-shadow: 0 4px 12px rgba(0, 122, 255, 0.25) !important;
 }
 
 /* 8. Result Card with Spring Animation */
-@keyframes iosReveal {
+@keyframes resultReveal {
     0% {
         opacity: 0;
         transform: translateY(20px) scale(0.99);
@@ -442,19 +442,19 @@ textarea::placeholder {
     }
 }
 
-.ios-result-section {
-    animation: iosReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+.result-section {
+    animation: resultReveal 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
     background: rgba(255, 255, 255, 0.94) !important;
     border: 2px solid rgba(0, 122, 255, 0.4) !important;
     margin-top: 18px !important;
 }
 
-:is(.dark) .ios-result-section {
+:is(.dark) .result-section {
     background: rgba(22, 27, 44, 0.96) !important;
     border-color: rgba(10, 132, 255, 0.5) !important;
 }
 
-.ios-result-tag {
+.result-tag {
     display: inline-block;
     background: rgba(0, 122, 255, 0.15) !important;
     color: #0056B3 !important;
@@ -466,7 +466,7 @@ textarea::placeholder {
     border: 1px solid rgba(0, 122, 255, 0.3) !important;
 }
 
-:is(.dark) .ios-result-tag {
+:is(.dark) .result-tag {
     background: rgba(10, 132, 255, 0.22) !important;
     color: #5AC8FA !important;
     border-color: rgba(90, 200, 250, 0.35) !important;
@@ -563,7 +563,7 @@ button[variant="stop"] {
 }
 
 /* 10. Footer */
-.apple-footer {
+.app-footer {
     text-align: center;
     padding: 24px 0 12px 0;
     color: #1E293B;
@@ -571,7 +571,7 @@ button[variant="stop"] {
     font-weight: 600;
 }
 
-:is(.dark) .apple-footer {
+:is(.dark) .app-footer {
     color: #CBD5E1;
 }
 """
@@ -705,7 +705,7 @@ def on_clear_history() -> Tuple[List[List[str]], List[List[str]]]:
 # -------------------------------------------------------------------------
 def create_app() -> gr.Blocks:
     """
-    Constructs the streamlined Apple iOS translation interface.
+    Constructs the streamlined modern WindowGlass translation interface.
     Layout order:
     1. Language selectors & Text input box (at top)
     2. Primary Translate button (under that)
@@ -723,16 +723,16 @@ def create_app() -> gr.Blocks:
     elif "show_copy_button" in tb_sig:
         copy_kwarg = {"show_copy_button": True}
 
-    with gr.Blocks(title="Translate — Apple iOS Experience") as demo:
+    with gr.Blocks(title="Translate AI — Language Translation Tool") as demo:
         # History state management
         history_state = gr.State([])
 
         # 1. Navigation Header
         gr.HTML("""
-        <div class="apple-header">
-            <span class="apple-pill-tag">✦ Neural Engine</span>
-            <h1 class="apple-title">Translate</h1>
-            <p class="apple-subtitle">Instant speech and text translation across 130+ languages</p>
+        <div class="app-header">
+            <span class="pill-tag">✦ Neural Engine</span>
+            <h1 class="app-title">Translate</h1>
+            <p class="app-subtitle">Instant speech and text translation across 130+ languages</p>
         </div>
         """)
 
@@ -747,7 +747,7 @@ def create_app() -> gr.Blocks:
                     interactive=True,
                     scale=1,
                     min_width=320,
-                    elem_classes=["ios-dropdown-picker"]
+                    elem_classes=["dropdown-picker"]
                 )
                 target_dropdown = gr.Dropdown(
                     choices=target_choices,
@@ -757,7 +757,7 @@ def create_app() -> gr.Blocks:
                     interactive=True,
                     scale=1,
                     min_width=320,
-                    elem_classes=["ios-dropdown-picker"]
+                    elem_classes=["dropdown-picker"]
                 )
 
             input_text = gr.Textbox(
@@ -773,17 +773,17 @@ def create_app() -> gr.Blocks:
             )
 
         # 3. Under that: Primary Translate Button
-        with gr.Row(elem_classes=["apple-translate-btn"]):
+        with gr.Row(elem_classes=["translate-btn"]):
             translate_btn = gr.Button(
                 "🚀 Translate",
                 variant="primary"
             )
 
         # 4. Under that: Animated Transition Result Card (Revealed on Translate)
-        with gr.Column(visible=False, elem_classes=["ios-result-section"]) as result_card:
+        with gr.Column(visible=False, elem_classes=["result-section"]) as result_card:
             result_badge = gr.Markdown(
                 "✦ Translation Result",
-                elem_classes=["ios-result-tag"]
+                elem_classes=["result-tag"]
             )
             with gr.Row():
                 with gr.Column(scale=3):
@@ -820,11 +820,11 @@ def create_app() -> gr.Blocks:
                 with gr.Row():
                     clear_history_btn = gr.Button("Clear History", size="sm", variant="stop")
 
-        # 6. Apple Footer
+        # 6. App Footer
         gr.HTML(
             """
-            <div class="apple-footer">
-                Designed with Apple Human Interface Guidelines • Neural Speech & Translation Engine
+            <div class="app-footer">
+                CodeAlpha Artificial Intelligence Internship • Neural Speech & Translation Engine
             </div>
             """
         )
@@ -889,6 +889,6 @@ def create_app() -> gr.Blocks:
 # -------------------------------------------------------------------------
 if __name__ == "__main__":
     app = create_app()
-    print("Launching Apple iOS-Style AI Language Translation Tool...")
-    theme = get_ios_theme()
-    app.launch(theme=theme, css=APPLE_IOS_CSS, share=False, allowed_paths=["assets"])
+    print("Launching AI Language Translation Tool...")
+    theme = get_glass_theme()
+    app.launch(theme=theme, css=WINDOW_GLASS_CSS, share=False, allowed_paths=["assets"])

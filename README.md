@@ -1,25 +1,25 @@
-# Translate AI — iOS-Style Language Translation Tool 🌐
+# Translate AI — Language Translation Tool 🌐
 
-An intuitive, AI-powered multi-language translation web application featuring an **Apple iOS Human Interface Guidelines (HIG)** aesthetic, built with **Python**, **Gradio**, **deep-translator**, and **Google Text-to-Speech (gTTS)**.
+An intuitive, AI-powered multi-language translation web application featuring a modern **WindowGlass** aesthetic with Times New Roman typography, built with **Python**, **Gradio**, **deep-translator**, and **Google Text-to-Speech (gTTS)**.
 
 ---
 
 ## 📖 Project Overview
 
-**Translate AI** is designed to provide seamless, reliable translation across 130+ languages worldwide with the polish and responsiveness of a native iOS application. In addition to high-fidelity text translation, the application includes natural speech pronunciation (TTS), dynamic word and character counters, instant language swapping, and an ongoing translation history log.
+**Translate AI** is designed to provide seamless, reliable translation across 130+ languages worldwide with high polish and responsiveness. In addition to high-fidelity text translation, the application includes natural speech pronunciation (TTS), dynamic word and character counters, instant language swapping, and an ongoing translation history log.
 
 The project is structured to run smoothly in both local environments (`app.py`) and cloud runtimes like **Google Colab** (`notebooks/translation_tool.ipynb`).
 
 ---
 
-##  iOS WindowGlass Design Highlights
+## 💎 WindowGlass Design Highlights
 
 * **WindowGlass / Frosted Glassmorphism:** Translucent glass cards with hardware-accelerated `backdrop-filter: blur(28px) saturate(190%)`, specular border reflections, and multi-tier ambient shadows.
 * **Translation Icon Wallpaper Background:** Customized dynamic wallpaper with frosted glass ambient overlay.
-* **Horizontally Extended Canvas (1100px):** Expansive, spacious layout with side-by-side text and audio controls and wide history tables.
-* **San Francisco Typography & Apple System Fonts:** Crystal-clear visual hierarchy using `-apple-system`, `SF Pro Display`, and Apple system fonts.
-* **Apple Segmented Pickers & Pill Controls:** Pill-shaped action buttons (Translate, Swap ⇄, Clear ✕, Listen 🔊) with tactile spring interactions.
-* **iOS Inset Grouped History:** History logs styled after native iOS Settings and Notes recents with smooth disclosures.
+* **Horizontally Extended Canvas (1080px):** Expansive, spacious layout with side-by-side text and audio controls and wide history tables.
+* **Times New Roman Typography:** Classic, crystal-clear visual hierarchy using Times New Roman typography across all cards and controls.
+* **Segmented Pickers & Pill Controls:** Pill-shaped action buttons (Translate, Swap ⇄, Clear ✕, Listen 🔊) with smooth tactile interactions.
+* **Inset Grouped History:** History logs styled with smooth disclosures and clean 28px curved card borders.
 
 ---
 
@@ -81,9 +81,9 @@ Render Output, Play Audio & Update History Log
 ## 📁 Project Structure
 
 ```text
-LanguageTranslation/
+CodeAlpha_LanguageTranslation/
 │
-├── app.py                      # Main standalone web application (iOS-Styled Gradio App)
+├── app.py                      # Main standalone web application (Gradio App)
 ├── translation.py              # Modular translation engine, language config & TTS logic
 ├── requirements.txt            # Project dependencies
 ├── README.md                   # Complete documentation
@@ -125,8 +125,8 @@ The application supports over **130+ languages** worldwide with smart instant se
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/Saabeer05G9/LanguageTranslation.git
-cd LanguageTranslation
+git clone https://github.com/Saabeer05G9/CodeAlpha_LanguageTranslation.git
+cd CodeAlpha_LanguageTranslation
 ```
 
 ### 2. (Optional) Create a Virtual Environment
@@ -170,7 +170,7 @@ Open your browser at `http://127.0.0.1:7860`.
 
 | Interface View | Feature Demonstration |
 | :---: | :---: |
-| *iOS-Style Interface Overview* | *Translation & TTS in Action* |
+| *Modern Interface Overview* | *Translation & TTS in Action* |
 
 ---
 

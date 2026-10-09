@@ -72,24 +72,27 @@ _FORMATTED_ALL_LANGS: Dict[str, str] = {
     _format_display_name(k): v for k, v in _RAW_GOOGLE_LANGS.items()
 }
 
-# Construct SUPPORTED_LANGUAGES: priority languages first, then remainder alphabetically
-SUPPORTED_LANGUAGES: Dict[str, str] = {}
+# Construct LANGUAGES: priority languages first, then remainder alphabetically
+LANGUAGES: Dict[str, str] = {}
 for lang in _PRIORITY_ORDER:
     if lang in _FORMATTED_ALL_LANGS:
-        SUPPORTED_LANGUAGES[lang] = _FORMATTED_ALL_LANGS[lang]
+        LANGUAGES[lang] = _FORMATTED_ALL_LANGS[lang]
 
 for lang in sorted(_FORMATTED_ALL_LANGS.keys()):
-    if lang not in SUPPORTED_LANGUAGES:
-        SUPPORTED_LANGUAGES[lang] = _FORMATTED_ALL_LANGS[lang]
+    if lang not in LANGUAGES:
+        LANGUAGES[lang] = _FORMATTED_ALL_LANGS[lang]
+
+# Canonical aliases
+SUPPORTED_LANGUAGES: Dict[str, str] = LANGUAGES
 
 # Source languages: includes "Auto Detect" as first option
 SOURCE_LANGUAGES: Dict[str, str] = {
     "Auto Detect": "auto",
-    **SUPPORTED_LANGUAGES
+    **LANGUAGES
 }
 
-# Target languages: all 133 supported languages
-TARGET_LANGUAGES: Dict[str, str] = SUPPORTED_LANGUAGES
+# Target languages: all supported languages
+TARGET_LANGUAGES: Dict[str, str] = LANGUAGES
 
 # Fast normalized lookup maps for robust resolution
 _NORMALIZED_NAME_TO_CODE: Dict[str, str] = {
@@ -275,7 +278,7 @@ def translate_text(
     """
     # 1. Validation: Empty or whitespace input
     if text is None or not text.strip():
-        return ""
+        return "Please enter some text to translate."
 
     clean_text = text.strip()
 
@@ -315,6 +318,8 @@ def translate_text(
 
             fallback_translator = MyMemoryTranslator(source=source_mem, target=target_mem)
             fallback_translated = fallback_translator.translate(clean_text)
+            if fallback_translated and "QUERY LENGTH LIMIT EXCEDEED" in fallback_translated.upper():
+                fallback_translated = f"Translation temporarily unavailable for this phrase in {target_language}. Please try a different wording."
             return fallback_translated if fallback_translated is not None else ""
         except Exception as fallback_err:
             return f"Translation Service Unavailable: {str(fallback_err)}"
@@ -349,8 +354,15 @@ def generate_tts_audio(text: str, target_language: str = "Telugu") -> Optional[s
 
     clean_text = text.strip()
 
-    # Do not attempt TTS on error messages
-    if clean_text.startswith("Error:") or clean_text.startswith("Language Error:") or clean_text.startswith("Translation Error:"):
+    # Do not attempt TTS on validation or error messages
+    if (
+        clean_text == "Please enter some text to translate."
+        or clean_text.startswith("Error:")
+        or clean_text.startswith("Language Error:")
+        or clean_text.startswith("Translation Error:")
+        or clean_text.startswith("Translation Service Unavailable:")
+        or clean_text.startswith("Translation temporarily unavailable")
+    ):
         return None
 
     try:

@@ -54,3 +54,6 @@ credentials.json
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Scratch and test profiles
+scratch/
